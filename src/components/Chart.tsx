@@ -1,18 +1,17 @@
-import React, { useCallback, useMemo } from "react";
-import { withTooltip, Tooltip, defaultStyles } from "@visx/tooltip";
-import { AreaClosed, Line, Bar } from "@visx/shape";
+import { AxisBottom, AxisLeft } from "@visx/axis";
 import { curveMonotoneX } from "@visx/curve";
-import { GridRows, GridColumns } from "@visx/grid";
-import { scaleTime, scaleLinear } from "@visx/scale";
-import { WithTooltipProvidedProps } from "@visx/tooltip/lib/enhancers/withTooltip";
-import { LinearGradient } from "@visx/gradient";
-import { max, extent, bisector } from "d3-array";
-import { timeFormat } from "d3-time-format";
 import { localPoint } from "@visx/event";
-
-import { PaisResponse, StatusType } from "../types";
-import { AxisLeft } from "@visx/axis";
+import { LinearGradient } from "@visx/gradient";
+import { GridColumns, GridRows } from "@visx/grid";
 import { Group } from "@visx/group";
+import { scaleLinear, scaleTime } from "@visx/scale";
+import { AreaClosed, Bar, Line } from "@visx/shape";
+import { defaultStyles, Tooltip, withTooltip } from "@visx/tooltip";
+import { WithTooltipProvidedProps } from "@visx/tooltip/lib/enhancers/withTooltip";
+import { bisector, extent, max } from "d3-array";
+import { timeFormat } from "d3-time-format";
+import React, { useCallback, useMemo } from "react";
+import { PaisResponse, StatusType } from "../types";
 
 //Colors
 export const background = "#3b6978";
@@ -31,9 +30,8 @@ const formatDate = timeFormat("%b %d, '%y");
 // accessors
 const getXValue = (d: PaisResponse): Date => new Date(d.Date);
 const getYValue = (status: StatusType) => (d: PaisResponse) => d[status];
-const getDate = (p: PaisResponse): Date => new Date(p.Date);
-const getCasoValue = (p: PaisResponse) => p.Confirmed;
-const bisectDate = bisector<PaisResponse, Date>((p) => new Date(p.Date)).left;
+
+const bisectDate = bisector<PaisResponse, Date>((p) => new Date(p.Date)).right;
 
 type AreaProps = {
   width: number;
@@ -63,7 +61,7 @@ export const Chart = withTooltip<MyProps, TooltipData>(
   ({
     width,
     height,
-    margin = { top: 40, right: 30, bottom: 50, left: 40 },
+    margin = { top: 40, right: 30, bottom: 50, left: 50 },
     showTooltip,
     hideTooltip,
     tooltipData,
@@ -91,7 +89,7 @@ export const Chart = withTooltip<MyProps, TooltipData>(
       () =>
         scaleLinear({
           range: [yMax, 0],
-          domain: [0, (max(data, getYValue(status)) || 0) + yMax / 3],
+          domain: [0, max(data, getYValue(status)) || 0 /* + yMax / 3 */],
           nice: true,
         }),
       [data, yMax, status]
@@ -110,20 +108,21 @@ export const Chart = withTooltip<MyProps, TooltipData>(
         const d0 = data[index - 1];
         const d1 = data[index];
         let d = d0;
-        if (d1 && getDate(d1)) {
+        if (d1 && getXValue(d1)) {
           d =
-            x0.valueOf() - getDate(d0).valueOf() >
-            getDate(d1).valueOf() - x0.valueOf()
+            x0.valueOf() - getXValue(d0).valueOf() >
+            getXValue(d1).valueOf() - x0.valueOf()
               ? d1
               : d0;
         }
+        console.log({ x, x0, d0, d1, d, test: typeof x0 });
         showTooltip({
           tooltipData: d,
-          tooltipLeft: x,
-          tooltipTop: yScale(getCasoValue(d)),
+          tooltipLeft: x - margin.left,
+          tooltipTop: yScale(getYValue(status)(d)),
         });
       },
-      [showTooltip, xScale, yScale, data]
+      [showTooltip, xScale, yScale, data, status, margin]
     );
 
     return (
@@ -148,12 +147,9 @@ export const Chart = withTooltip<MyProps, TooltipData>(
             to={accentColor}
             toOpacity={0.1}
           />
-          <Group
-            left={margin.left + margin.right - 10}
-            top={margin.top + margin.bottom - 10}
-          >
+          <Group left={margin.left} top={margin.top}>
             <GridRows
-              scale={xScale}
+              scale={yScale}
               width={xMax}
               strokeDasharray="3,3"
               stroke="#A0AEC0"
@@ -182,8 +178,8 @@ export const Chart = withTooltip<MyProps, TooltipData>(
             <Bar
               x={0}
               y={0}
-              width={width}
-              height={height}
+              width={xMax}
+              height={yMax}
               fill="transparent"
               rx={14}
               onTouchStart={handleTooltip}
@@ -224,6 +220,11 @@ export const Chart = withTooltip<MyProps, TooltipData>(
               </g>
             )}
             <AxisLeft scale={yScale} />
+            <AxisBottom
+              top={yMax}
+              scale={xScale}
+              numTicks={width > 520 ? 10 : 5}
+            />
           </Group>
         </svg>
         {tooltipData && (
@@ -233,7 +234,7 @@ export const Chart = withTooltip<MyProps, TooltipData>(
               left={tooltipLeft + 12}
               style={tooltipStyles}
             >
-              {`${status}: ${getCasoValue(tooltipData)}`}
+              {`${status}: ${getYValue(status)(tooltipData)}`}
             </Tooltip>
             <Tooltip
               top={-14}
@@ -245,7 +246,7 @@ export const Chart = withTooltip<MyProps, TooltipData>(
                 transform: "translateX(-50%)",
               }}
             >
-              {formatDate(getDate(tooltipData))}
+              {formatDate(getXValue(tooltipData))}
             </Tooltip>
           </div>
         )}
