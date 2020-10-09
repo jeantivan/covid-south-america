@@ -93,6 +93,46 @@ function App() {
           <div ref={containerRef} aria-hidden="true" />
 
           <Grid container spacing={2}>
+            <Grid container>
+              <Grid item sm={2}>
+                <img
+                  className={classes.countryImg}
+                  src={`${process.env.PUBLIC_URL}/images/banderas/${paisSeleccionado.Slug}.jpg`}
+                  alt={`Bandera de ${paisSeleccionado.Country}`}
+                />
+              </Grid>
+              <Grid sm={10} item container>
+                <Grid item sm={8}>
+                  <Typography variant="h4">
+                    {paisSeleccionado.Country}
+                  </Typography>
+                </Grid>
+
+                <Grid item sm={4} style={{ flexShrink: 1 }}>
+                  <TextField
+                    id="select-status"
+                    name="status"
+                    label="Ver:"
+                    select
+                    fullWidth
+                    variant="outlined"
+                    value={status}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="Confirmed">Confirmados</MenuItem>
+                    <MenuItem value="Recovered">Recuperados</MenuItem>
+                    <MenuItem value="Deaths">Muertos</MenuItem>
+                  </TextField>
+                </Grid>
+              </Grid>
+            </Grid>
+            {!data ? null : (
+              <Details
+                Confirmed={dataSummary?.TotalConfirmed}
+                Recovered={dataSummary?.TotalRecovered}
+                Deaths={dataSummary?.TotalDeaths}
+              />
+            )}
             <Grid item sm={12}>
               <AspectRatioBox ratio={9 / 16} boxProps={{ mb: 4 }}>
                 <ParentSize>
@@ -140,47 +180,6 @@ function App() {
                 </Box>
                 */}
               </AspectRatioBox>
-
-              <Grid container spacing={2}>
-                <Grid item sm={2}>
-                  <img
-                    className={classes.countryImg}
-                    src={`${process.env.PUBLIC_URL}/images/banderas/${paisSeleccionado.Slug}.jpg`}
-                    alt={`Bandera de ${paisSeleccionado.Country}`}
-                  />
-                </Grid>
-                <Grid sm={10} item container>
-                  <Grid item sm={8}>
-                    <Typography variant="h4">
-                      {paisSeleccionado.Country}
-                    </Typography>
-                  </Grid>
-
-                  <Grid item sm={4} style={{ flexShrink: 1 }}>
-                    <TextField
-                      id="select-status"
-                      name="status"
-                      label="Ver:"
-                      select
-                      fullWidth
-                      variant="outlined"
-                      value={status}
-                      onChange={handleChange}
-                    >
-                      <MenuItem value="Confirmed">Confirmados</MenuItem>
-                      <MenuItem value="Recovered">Recuperados</MenuItem>
-                      <MenuItem value="Deaths">Muertos</MenuItem>
-                    </TextField>
-                  </Grid>
-                </Grid>
-              </Grid>
-              {!data ? null : (
-                <Details
-                  Confirmed={dataSummary?.TotalConfirmed}
-                  Recovered={dataSummary?.TotalRecovered}
-                  Deaths={dataSummary?.TotalDeaths}
-                />
-              )}
             </Grid>
             <Grid item sm={4}>
               <Box mb={2}>
