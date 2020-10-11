@@ -20,20 +20,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface AspectRatioBoxProps {
+interface AspectRatioBoxProps extends BoxProps {
   children: ReactNode;
   ratio: number;
-  boxProps: BoxProps;
 }
 
 export const AspectRatioBox: React.FC<AspectRatioBoxProps> = ({
   ratio,
   children,
-  boxProps,
+  ...rest
 }) => {
   const classes = useStyles({ ratio });
   return (
-    <Box className={classes.root} {...boxProps}>
+    <Box className={classes.root} {...rest}>
       <div className={classes.inside}>{children}</div>
     </Box>
   );
