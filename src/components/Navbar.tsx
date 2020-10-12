@@ -23,7 +23,11 @@ export const Navbar: React.FC = () => {
         <Typography variant="h6" component="h1" className={classes.title}>
           Covid-19 Latinoamerica
         </Typography>
-        <IconButton aria-label="Github profile">
+        <IconButton
+          component="a"
+          href="https://github.com/jptivan53/covid-latam"
+          aria-label="Github profile"
+        >
           <GithubIcon />
         </IconButton>
       </Toolbar>
