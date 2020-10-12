@@ -1,6 +1,5 @@
 import { countries } from "./countries";
 import {
-  CountryResponse,
   GlobalSummaryResponse,
   LASummary,
   SummaryCountryResponse,
