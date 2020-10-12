@@ -99,10 +99,6 @@ export const Chart = withTooltip<MyProps, TooltipData>(
       [data, yMax, status]
     );
 
-    React.useEffect(() => {
-      console.log({ theme });
-    }, [theme]);
-
     // tooltip handler
     const handleTooltip = useCallback(
       (
@@ -223,16 +219,18 @@ export const Chart = withTooltip<MyProps, TooltipData>(
                 />
               </g>
             )}
+            {}
             <AxisLeft
               scale={yScale}
               tickClassName={classes.tick}
               stroke={contrastText}
               tickStroke={contrastText}
+              numTicks={width < 600 ? 3 : 10}
             />
             <AxisBottom
               top={yMax}
               scale={xScale}
-              numTicks={10}
+              numTicks={width < 600 ? 4 : 10}
               tickClassName={classes.tick}
               stroke={contrastText}
               tickStroke={contrastText}
