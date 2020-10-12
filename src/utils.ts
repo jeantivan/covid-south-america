@@ -1,5 +1,10 @@
-import { PaisType, PaisResponse } from "./types";
-import { paises } from "./paises";
+import { countries } from "./countries";
+import {
+  CountryResponse,
+  GlobalSummaryResponse,
+  LASummary,
+  SummaryCountryResponse,
+} from "./types";
 
 let round2decimal = (num: number) =>
   Math.round((num + Number.EPSILON) * 100) / 100;
@@ -26,26 +31,29 @@ export const formatTotal = (total: number): string =>
 export const fetcher = (input: RequestInfo, init?: RequestInit | undefined) =>
   fetch(input, init).then((res) => res.json());
 
-export const filterLACountries = (othersCountries: PaisType[]) => {
-  const laCountries = othersCountries.filter((otherCountry: PaisType) => {
-    //let condition = false;
-    return paises.forEach((p: PaisType) => {
-      return p === otherCountry;
-    });
-    // for (let i = 0; i < paises.length; i++) {
-    //   if (paises[i].Slug === country.Slug) {
-    //     condition = true;
-    //     break;
-    //   }
-    // }
+export const filterLACountries = (
+  othersCountries: SummaryCountryResponse[]
+) => {
+  const laCountries = othersCountries.filter((otherCountry) => {
+    let condition = false;
+    for (let i = 0; i < countries.length; i++) {
+      if (countries[i].Slug === otherCountry.Slug) {
+        condition = true;
+        break;
+      }
+    }
 
-    // return condition;
+    return condition;
   });
 
   return laCountries; // Filtra los paises de Latinoamérica;
 };
-/*
-export const laSummary = (globalSummary: Summary[]) => {
+
+export const computeLASummary = (
+  globalSummary: GlobalSummaryResponse | undefined
+): LASummary | undefined => {
+  if (!globalSummary) return;
+
   let initial = {
     NewConfirmed: 0,
     NewDeaths: 0,
@@ -55,22 +63,30 @@ export const laSummary = (globalSummary: Summary[]) => {
     TotalRecovered: 0,
   };
 
-  let lastUpdate = filterLACountries(globalSummary); // Ultimos datos de los paises de latinoamérica
+  const laCountriesResponse = filterLACountries(globalSummary.Countries);
 
-  const summary = lastUpdate.reduce((tot, cur) => {
-    return {
-      NewConfirmed: tot.NewConfirmed + cur.NewConfirmed,
-      NewDeaths: tot.NewDeaths + cur.NewDeaths,
-      NewRecovered: tot.NewRecovered + cur.NewRecovered,
-      TotalConfirmed: tot.TotalConfirmed + cur.TotalConfirmed,
-      TotalDeaths: tot.TotalDeaths + cur.TotalDeaths,
-      TotalRecovered: tot.TotalRecovered + cur.TotalRecovered,
-    };
-  }, initial); // Total
+  const laTotalSummary = laCountriesResponse.reduce(
+    (previousValue, currentValue) => {
+      return {
+        NewConfirmed: previousValue.NewConfirmed + currentValue.NewConfirmed,
+        NewDeaths: previousValue.NewDeaths + currentValue.NewDeaths,
+        NewRecovered: previousValue.NewRecovered + currentValue.NewRecovered,
+        TotalConfirmed:
+          previousValue.TotalConfirmed + currentValue.TotalConfirmed,
+        TotalDeaths: previousValue.TotalDeaths + currentValue.TotalDeaths,
+        TotalRecovered:
+          previousValue.TotalRecovered + currentValue.TotalRecovered,
+      };
+    },
+    initial
+  );
 
-  return { summary, lastUpdate };
+  return {
+    Date: globalSummary.Date,
+    Summary: laTotalSummary,
+    Countries: laCountriesResponse,
+  };
 };
-*/
 
 export const fixCountryName = (country: string) => {
   switch (country) {
@@ -87,27 +103,4 @@ export const fixCountryName = (country: string) => {
     default:
       return country;
   }
-};
-
-export const sumData = (data: PaisResponse[]) => {
-  let initial = {
-    TotalConfirmed: 0,
-    TotalDeaths: 0,
-    TotalRecovered: 0,
-  };
-
-  const { TotalDeaths, TotalConfirmed, TotalRecovered } = data.reduce(
-    (acc, currCountry) => ({
-      TotalConfirmed: acc.TotalConfirmed + currCountry.Confirmed,
-      TotalDeaths: acc.TotalDeaths + currCountry.Deaths,
-      TotalRecovered: acc.TotalRecovered + currCountry.Recovered,
-    }),
-    initial
-  );
-
-  return {
-    TotalConfirmed: formatTotal(TotalConfirmed),
-    TotalDeaths: formatTotal(TotalDeaths),
-    TotalRecovered: formatTotal(TotalRecovered),
-  };
 };
