@@ -1,25 +1,30 @@
 import {
   Box,
   CircularProgress,
-  Divider,
+  Container,
   Grid,
   makeStyles,
   MenuItem,
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useRef, useState } from "react";
-import useSWR from "swr";
-import { Details } from "./components/Details";
-import { Navbar } from "./components/Navbar";
-import { AspectRatioBox } from "./components/AspectRatioBox";
-import { Pais } from "./components/Pais";
-import { paises } from "./paises";
-import { PaisType, StatusType } from "./types";
-import { fetcher, sumData } from "./utils";
 import { ParentSize } from "@visx/responsive";
+import React, { useMemo, useRef, useState } from "react";
+import useSWR from "swr";
+import { AspectRatioBox } from "./components/AspectRatioBox";
 import { Chart } from "./components/Chart";
-import { mockData } from "./mock-data";
+import { CountryTable } from "./components/CountryTable";
+//import { Details } from "./components/Details";
+import { Navbar } from "./components/Navbar";
+import { FLAG_PREFIX } from "./constants";
+import { countries } from "./countries";
+import {
+  Country,
+  CountryResponse,
+  GlobalSummaryResponse,
+  Status,
+} from "./types";
+import { computeLASummary, fetcher } from "./utils";
 
 const useStyles = makeStyles((theme) => ({
   countryImg: {
@@ -30,21 +35,55 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  let aspectRatioBoxContent;
+
   const classes = useStyles();
-
-  let dataSummary;
   const containerRef = useRef<HTMLDivElement>(null);
-  const [paisSeleccionado, setPaisSeleccionado] = useState(paises[0]);
+  const [selectedCountry, setSelectedCountry] = useState<Country>(countries[0]);
 
-  const [status, setStatus] = useState<StatusType>("Confirmed");
+  const [status, setStatus] = useState<Status>("Confirmed");
 
-  const { data, error } = useSWR(
-    `https://api.covid19api.com/dayone/country/${paisSeleccionado.Slug}`,
+  const { data: globalData } = useSWR<GlobalSummaryResponse>(
+    `https://api.covid19api.com/summary`,
     fetcher
   );
 
+  const { data, error } = useSWR<CountryResponse[]>(
+    `https://api.covid19api.com/dayone/country/${selectedCountry.Slug}`,
+    fetcher
+  );
+
+  const laSummary = useMemo(() => computeLASummary(globalData), [globalData]);
+
+  if (error) {
+    aspectRatioBoxContent = (
+      <Box display="flex" alignItems="center" justifyContent="center">
+        <Typography variant="h5">Something wen't wrong</Typography>
+      </Box>
+    );
+  }
+
+  if (!data) {
+    aspectRatioBoxContent = (
+      <Box
+        bgcolor="#303030"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   if (data) {
-    dataSummary = sumData(data);
+    aspectRatioBoxContent = (
+      <ParentSize>
+        {({ width, height }) => (
+          <Chart status={status} width={width} height={height} data={data} />
+        )}
+      </ParentSize>
+    );
   }
 
   const scrollToChar = () => {
@@ -54,14 +93,19 @@ function App() {
     return;
   };
 
-  const handleSeleccionarPais = (pais: PaisType) => {
-    if (pais === paisSeleccionado) {
+  const handleSelectCountry = (country: Country) => {
+    if (country === selectedCountry) {
       return;
     }
 
-    setPaisSeleccionado(pais);
+    setSelectedCountry(country);
     scrollToChar();
   };
+
+  React.useEffect(() => {
+    console.log({ globalData, data });
+    console.log({ laSummary });
+  }, [globalData, data, laSummary]);
 
   const handleChange = (e: any) => {
     switch (e.target.value) {
@@ -82,33 +126,35 @@ function App() {
   return (
     <>
       <Navbar />
-      <Box p={8} width="100%" maxWidth="1024px" m="auto">
-        <Box mb={8}>
-          <Typography variant="h4" component="h2">
-            Resumen total
-          </Typography>
-          <Typography color="textSecondary">26 de septiembre 2020</Typography>
-        </Box>
-        <Box component="section" my={8}>
-          <div ref={containerRef} aria-hidden="true" />
-
-          <Grid container spacing={2}>
-            <Grid container>
-              <Grid item sm={2}>
-                <img
-                  className={classes.countryImg}
-                  src={`${process.env.PUBLIC_URL}/images/banderas/${paisSeleccionado.Slug}.jpg`}
-                  alt={`Bandera de ${paisSeleccionado.Country}`}
-                />
-              </Grid>
-              <Grid sm={10} item container>
-                <Grid item sm={8}>
-                  <Typography variant="h4">
-                    {paisSeleccionado.Country}
-                  </Typography>
+      <Container component="main">
+        <Box py={4}>
+          <Box>
+            <Typography variant="h4" component="h2">
+              Resumen total
+            </Typography>
+            <Typography color="textSecondary">26 de septiembre 2020</Typography>
+          </Box>
+          <Box component="section" my={4}>
+            <div ref={containerRef} aria-hidden="true" />
+            <Grid container spacing={2}>
+              <Grid item container xs={12}>
+                <Grid xs={12} md={9} item container alignItems="center">
+                  <Box display="flex" alignItems="center">
+                    <Box mr={4}>
+                      <img
+                        className={classes.countryImg}
+                        src={`${FLAG_PREFIX}${selectedCountry.Slug}.jpg`}
+                        alt={`Bandera de ${selectedCountry.Country}`}
+                      />
+                    </Box>
+                    <Box>
+                      <Typography variant="h4">
+                        {selectedCountry.Country}
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Grid>
-
-                <Grid item sm={4} style={{ flexShrink: 1 }}>
+                <Grid xs={12} md={3} item container alignItems="center">
                   <TextField
                     id="select-status"
                     name="status"
@@ -125,81 +171,29 @@ function App() {
                   </TextField>
                 </Grid>
               </Grid>
+              <Grid item xs={12}>
+                <AspectRatioBox ratio={9 / 16}>
+                  <Box height="100%">{aspectRatioBoxContent}</Box>
+                </AspectRatioBox>
+              </Grid>
+              <Grid item xs={12} container spacing={2}>
+                <Grid item sm={12}>
+                  <Typography variant="h5" component="h3">
+                    Casos por país
+                  </Typography>
+                </Grid>
+                <Grid item lg={8}>
+                  <CountryTable
+                    laSummary={laSummary}
+                    selectedCountry={selectedCountry}
+                    handleSelectedCountry={handleSelectCountry}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
-            {!data ? null : (
-              <Details
-                Confirmed={dataSummary?.TotalConfirmed}
-                Recovered={dataSummary?.TotalRecovered}
-                Deaths={dataSummary?.TotalDeaths}
-              />
-            )}
-            <Grid item sm={12}>
-              <AspectRatioBox ratio={9 / 16} boxProps={{ mb: 4 }}>
-                <ParentSize>
-                  {({ width, height }) => (
-                    <Chart
-                      status={status}
-                      width={width}
-                      height={height}
-                      data={mockData}
-                    />
-                  )}
-                </ParentSize>
-                {/* <Box height="100%">
-                  {error ? (
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <Typography variant="h5">
-                        Something wen't wrong
-                      </Typography>
-                    </Box>
-                  ) : !data ? (
-                    <Box
-                      bgcolor="#303030"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <CircularProgress />
-                    </Box>
-                  ) : (
-                    <ParentSize>
-                      {({ width, height }) => (
-                        <Chart
-                          status={status}
-                          width={width}
-                          height={height}
-                          data={data}
-                        />
-                      )}
-                    </ParentSize>
-                  )}
-                </Box>
-                */}
-              </AspectRatioBox>
-            </Grid>
-            <Grid item sm={4}>
-              <Box mb={2}>
-                <Typography variant="h5" component="h3">
-                  Casos por país
-                </Typography>
-              </Box>
-              <Divider />
-              {paises.map((pais) => (
-                <Pais
-                  key={pais.Slug}
-                  pais={pais}
-                  handleSelecionarPais={handleSeleccionarPais}
-                  paisSeleccionado={paisSeleccionado}
-                />
-              ))}
-            </Grid>
-          </Grid>
+          </Box>
         </Box>
-      </Box>
+      </Container>
     </>
   );
 }
