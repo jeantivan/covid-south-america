@@ -1,5 +1,5 @@
 import React from "react";
-import { PaisType } from "../types";
+import { Country } from "../types";
 import { fixCountryName } from "../utils";
 import { Typography, Paper, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface PaisProps {
-  pais: PaisType;
-  paisSeleccionado: PaisType;
+  pais: Country;
+  paisSeleccionado: Country;
   handleSelecionarPais: any;
 }
 

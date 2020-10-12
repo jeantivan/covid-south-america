@@ -11,7 +11,7 @@ import { WithTooltipProvidedProps } from "@visx/tooltip/lib/enhancers/withToolti
 import { bisector, extent, max } from "d3-array";
 import { timeFormat } from "d3-time-format";
 import React, { useCallback, useMemo } from "react";
-import { PaisResponse, StatusType } from "../types";
+import { CountryResponse, Status } from "../types";
 
 const tooltipStyles = {
   ...defaultStyles,
@@ -23,9 +23,10 @@ const tooltipStyles = {
 const formatDate = timeFormat("%b %d, '%y");
 
 // accessors
-const getXValue = (d: PaisResponse): Date => new Date(d.Date);
-const getYValue = (status: StatusType) => (d: PaisResponse) => d[status];
-const bisectDate = bisector<PaisResponse, Date>((p) => new Date(p.Date)).left;
+const getXValue = (d: CountryResponse): Date => new Date(d.Date);
+const getYValue = (status: Status) => (d: CountryResponse) => d[status];
+const bisectDate = bisector<CountryResponse, Date>((p) => new Date(p.Date))
+  .left;
 
 type AreaProps = {
   width: number;
@@ -34,11 +35,11 @@ type AreaProps = {
 };
 
 type MyProps = AreaProps & {
-  data?: PaisResponse[];
-  status: StatusType;
+  data?: CountryResponse[];
+  status: Status;
 };
 
-type TooltipData = PaisResponse;
+type TooltipData = CountryResponse;
 
 const useStyles = makeStyles((theme) => ({
   tick: {
@@ -164,7 +165,7 @@ export const Chart = withTooltip<MyProps, TooltipData>(
               strokeOpacity={0.3}
               pointerEvents="none"
             />
-            <AreaClosed<PaisResponse>
+            <AreaClosed<CountryResponse>
               data={data}
               x={(d) => xScale(getXValue(d)) as number}
               y={(d) => yScale(getYValue(status)(d)) as number}
