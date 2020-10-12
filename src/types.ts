@@ -1,3 +1,5 @@
+export type Status = "Confirmed" | "Recovered" | "Deaths";
+
 export type Summary = {
   NewConfirmed: number;
   NewDeaths: number;
@@ -7,25 +9,42 @@ export type Summary = {
   TotalRecovered: number;
 };
 
-export type PaisType = {
+export type Country = {
   Country: string;
   Slug: string;
   ISO2: string;
 };
 
-export type StatusType = "Confirmed" | "Recovered" | "Deaths";
-
-export type PaisResponse = {
+export type CountryResponse = {
   Country: string;
   CountryCode: string;
-  Province: string;
-  City: string;
-  CityCode: string;
-  Lat: string;
-  Lon: string;
   Confirmed: number;
   Deaths: number;
   Recovered: number;
   Active: number;
+  Date: string;
+  Province?: string;
+  City?: string;
+  CityCode?: string;
+  Lat?: string;
+  Lon?: string;
+};
+
+export type SummaryCountryResponse = Country &
+  Summary & {
+    Date: string;
+    Premium?: any;
+  };
+
+export type GlobalSummaryResponse = {
+  Global: Summary;
+  Countries: SummaryCountryResponse[];
+  Message: string;
+  Date: string;
+};
+
+export type LASummary = {
+  Summary: Summary;
+  Countries: SummaryCountryResponse[];
   Date: string;
 };
