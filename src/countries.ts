@@ -1,4 +1,4 @@
-export const paises = [
+export const countries = [
   {
     Country: "Argentina",
     Slug: "argentina",
