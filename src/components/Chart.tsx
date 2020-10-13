@@ -6,12 +6,19 @@ import { GridColumns, GridRows } from "@visx/grid";
 import { Group } from "@visx/group";
 import { scaleLinear, scaleTime } from "@visx/scale";
 import { AreaClosed, Bar, Line } from "@visx/shape";
-import { defaultStyles, Tooltip, withTooltip } from "@visx/tooltip";
-import { WithTooltipProvidedProps } from "@visx/tooltip/lib/enhancers/withTooltip";
+import {
+  defaultStyles,
+  Tooltip,
+  TooltipWithBounds,
+  useTooltip,
+  useTooltipInPortal,
+  withTooltip,
+} from "@visx/tooltip";
 import { bisector, extent, max } from "d3-array";
 import { timeFormat } from "d3-time-format";
 import React, { useCallback, useMemo } from "react";
 import { CountryResponse, Status } from "../types";
+import { formatTotal } from "../utils";
 
 const tooltipStyles = {
   ...defaultStyles,
@@ -48,21 +55,29 @@ const useStyles = makeStyles((theme) => ({
       fill: theme.palette.getContrastText(theme.palette.background.paper),
     },
   },
+  tooltipContainer: {
+    zIndex: 0,
+    position: "relative",
+    overflow: "hidden",
+  },
+  tooltip: {
+    zIndex: 2,
+
+    borderRadius: "50%",
+    background: "#35477d",
+    position: "absolute",
+  },
 }));
 
 export const Chart = withTooltip<MyProps, TooltipData>(
   ({
     width,
     height,
-    margin = { top: 40, right: 0, bottom: 50, left: 50 },
-    showTooltip,
-    hideTooltip,
-    tooltipData,
-    tooltipTop = 0,
-    tooltipLeft = 0,
+    margin = { top: 30, right: 0, bottom: 40, left: 50 },
+
     data = [],
     status = "Confirmed",
-  }: MyProps & WithTooltipProvidedProps<TooltipData>) => {
+  }: MyProps) => {
     if (width < 10) return null;
 
     const classes = useStyles();
@@ -76,6 +91,24 @@ export const Chart = withTooltip<MyProps, TooltipData>(
         : status === "Recovered"
         ? "success"
         : "error";
+
+    // Tooltip
+
+    const { containerRef } = useTooltipInPortal({
+      // use TooltipWithBounds
+      detectBounds: true,
+      // when tooltip containers are scrolled, this will correctly update the Tooltip position
+      scroll: true,
+    });
+
+    const {
+      tooltipData,
+      tooltipTop = 0,
+      tooltipLeft = 0,
+      showTooltip,
+      hideTooltip,
+      tooltipOpen,
+    } = useTooltip<TooltipData>();
 
     // bounds
     const xMax = width - margin.left - margin.right;
@@ -94,7 +127,7 @@ export const Chart = withTooltip<MyProps, TooltipData>(
       () =>
         scaleLinear({
           range: [yMax, 0],
-          domain: [0, max(data, getYValue(status)) || 0 /* + yMax / 3 */],
+          domain: [0, (max(data, getYValue(status)) || 0) + yMax / 3],
           nice: true,
         }),
       [data, yMax, status]
@@ -133,8 +166,8 @@ export const Chart = withTooltip<MyProps, TooltipData>(
     );
 
     return (
-      <div>
-        <svg width={width} height={height}>
+      <div className={classes.tooltipContainer}>
+        <svg ref={containerRef} width={width} height={height}>
           <Group left={margin.left} top={margin.top}>
             <rect
               x={0}
@@ -188,7 +221,7 @@ export const Chart = withTooltip<MyProps, TooltipData>(
               onMouseMove={handleTooltip}
               onMouseLeave={() => hideTooltip()}
             />
-            {tooltipData && (
+            {tooltipOpen && (
               <g>
                 <Line
                   from={{ x: tooltipLeft, y: 0 }}
@@ -220,18 +253,17 @@ export const Chart = withTooltip<MyProps, TooltipData>(
                 />
               </g>
             )}
-            {}
             <AxisLeft
               scale={yScale}
               tickClassName={classes.tick}
               stroke={contrastText}
               tickStroke={contrastText}
               numTicks={width < 600 ? 3 : 10}
+              tickFormat={(v) => `${formatTotal(Number(v))}`}
             />
             <AxisBottom
               top={yMax}
               scale={xScale}
-              numTicks={width < 600 ? 4 : 10}
               tickClassName={classes.tick}
               stroke={contrastText}
               tickStroke={contrastText}
@@ -240,25 +272,20 @@ export const Chart = withTooltip<MyProps, TooltipData>(
         </svg>
         {tooltipData && (
           <div>
-            <Tooltip
-              top={tooltipTop - 12}
-              left={tooltipLeft + 12}
-              style={tooltipStyles}
-            >
-              {`${status}: ${getYValue(status)(tooltipData)}`}
-            </Tooltip>
-            <Tooltip
-              top={0}
-              left={tooltipLeft}
+            <TooltipWithBounds
+              key={Math.random()}
+              top={tooltipTop - 40}
+              left={tooltipLeft + 24}
               style={{
                 ...defaultStyles,
-                minWidth: 72,
-                textAlign: "center",
-                transform: "translateX(-50%)",
+                background: theme.palette.background.paper,
+                color: contrastText,
+                boxShadow: theme.shadows[5],
               }}
             >
-              {formatDate(getXValue(tooltipData))}
-            </Tooltip>
+              <div>{`${status}: ${getYValue(status)(tooltipData)}`}</div>
+              <div>{formatDate(getXValue(tooltipData))}</div>
+            </TooltipWithBounds>
           </div>
         )}
       </div>
