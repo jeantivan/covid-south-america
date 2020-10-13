@@ -103,3 +103,15 @@ export const fixCountryName = (country: string) => {
       return country;
   }
 };
+
+export const getCountryNameBySlug = (slug: string | undefined) => {
+  if (!slug) return "";
+
+  const country = countries.find((c) => c.Slug === slug);
+
+  if (!country) {
+    return "";
+  }
+
+  return fixCountryName(country.Country);
+};
