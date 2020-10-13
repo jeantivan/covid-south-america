@@ -5,6 +5,7 @@ import useSWR from "swr";
 import { CountryTable } from "../components/CountryTable";
 import { GlobalSummaryResponse } from "../types";
 import { computeLASummary, fetcher } from "../utils";
+import { Helmet } from "react-helmet";
 
 export const HomePage = (props: RouteComponentProps) => {
   const { data: globalData } = useSWR<GlobalSummaryResponse>(
@@ -14,6 +15,9 @@ export const HomePage = (props: RouteComponentProps) => {
   const laSummary = useMemo(() => computeLASummary(globalData), [globalData]);
   return (
     <Box component="section" my={4}>
+      <Helmet>
+        <title>Covid 19 en Latinoamérica </title>
+      </Helmet>
       <Typography variant="h1">Home</Typography>
       <Grid container spacing={2}>
         <Grid item sm={12}>

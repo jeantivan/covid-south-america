@@ -19,6 +19,7 @@ import { FLAG_PREFIX } from "../constants";
 import { CountryResponse, Status } from "../types";
 import { fetcher, getCountryNameBySlug } from "../utils";
 import { timeFormat } from "d3-time-format";
+import { Helmet } from "react-helmet";
 
 interface CountryPageProps extends RouteComponentProps {
   country?: string;
@@ -99,6 +100,9 @@ export const CountryPage = (props: CountryPageProps) => {
   };
   return (
     <Box component="section" my={4}>
+      <Helmet>
+        <title>Casos en {countryName} | Covid 19 en Latinoamérica </title>
+      </Helmet>
       <Grid container spacing={2}>
         <Grid item container xs={12}>
           <Grid xs={12} md={9} item container alignItems="center">
