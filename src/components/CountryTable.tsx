@@ -1,18 +1,18 @@
-import React from "react";
-
 import {
+  fade,
   makeStyles,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  fade,
 } from "@material-ui/core";
-import { LASummary, Country, SummaryCountryResponse } from "../types";
+import { Link, useNavigate } from "@reach/router";
+import React from "react";
 import { FLAG_PREFIX } from "../constants";
+import { LASummary, SummaryCountryResponse } from "../types";
 import { fixCountryName } from "../utils";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,29 +33,15 @@ const useStyles = makeStyles((theme) => ({
   deaths: {
     color: theme.palette.error.main,
   },
-  tableRow: {
-    "&$selected": {
-      backgroundColor: fade(theme.palette.info.main, 0.2),
-      "&:hover": {
-        backgroundColor: fade(theme.palette.info.main, 0.2),
-      },
-    },
-  },
-  selected: {},
 }));
 
 interface CountryTableProps {
   laSummary?: LASummary;
-  selectedCountry: Country;
-  handleSelectedCountry: (country: Country) => void;
 }
 
-export const CountryTable: React.FC<CountryTableProps> = ({
-  laSummary,
-  selectedCountry,
-  handleSelectedCountry,
-}) => {
+export const CountryTable: React.FC<CountryTableProps> = ({ laSummary }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
 
   return (
     <TableContainer component={Paper}>
@@ -79,16 +65,11 @@ export const CountryTable: React.FC<CountryTableProps> = ({
           {laSummary &&
             laSummary.Countries.map((pais: SummaryCountryResponse) => (
               <TableRow
-                classes={{
-                  root: classes.tableRow,
-                  selected: classes.selected,
-                }}
-                key={pais.Slug}
                 hover
+                key={pais.Slug}
                 onClick={() => {
-                  handleSelectedCountry(pais);
+                  navigate(`/country/${pais.Slug}`);
                 }}
-                selected={pais === selectedCountry}
               >
                 <TableCell>
                   <img

@@ -1,6 +1,13 @@
-import { IconButton, AppBar, Toolbar, Typography } from "@material-ui/core";
+import {
+  IconButton,
+  AppBar,
+  Toolbar,
+  Typography,
+  Link,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import GithubIcon from "@material-ui/icons/GitHub";
+import { Link as ReachLink } from "@reach/router";
 
 import React from "react";
 const useStyles = makeStyles((theme) => ({
@@ -21,8 +28,11 @@ export const Navbar: React.FC = () => {
     <AppBar position="static" color="inherit" elevation={0}>
       <Toolbar>
         <Typography variant="h6" component="h1" className={classes.title}>
-          Covid-19 Latinoamerica
+          <Link color="inherit" component={ReachLink} to="/">
+            Covid-19 Latinoamerica
+          </Link>
         </Typography>
+
         <IconButton
           component="a"
           href="https://github.com/jptivan53/covid-latam"
