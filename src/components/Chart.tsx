@@ -8,7 +8,6 @@ import { scaleLinear, scaleTime } from "@visx/scale";
 import { AreaClosed, Bar, Line } from "@visx/shape";
 import {
   defaultStyles,
-  Tooltip,
   TooltipWithBounds,
   useTooltip,
   useTooltipInPortal,
@@ -19,13 +18,6 @@ import { timeFormat } from "d3-time-format";
 import React, { useCallback, useMemo } from "react";
 import { CountryResponse, Status } from "../types";
 import { formatTotal } from "../utils";
-
-const tooltipStyles = {
-  ...defaultStyles,
-  background: "#3b6978",
-  border: "1px solid white",
-  color: "white",
-};
 
 const formatDate = timeFormat("%b %d, '%y");
 
