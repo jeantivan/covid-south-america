@@ -10,10 +10,11 @@ export const countries = [
     ISO2: "BO",
   },
   {
-    Country: "Brasil",
+    Country: "Brazil",
     Slug: "brazil",
     ISO2: "BR",
   },
+
   {
     Country: "Chile",
     Slug: "chile",
@@ -25,70 +26,22 @@ export const countries = [
     ISO2: "CO",
   },
   {
-    Country: "Costa Rica",
-    Slug: "costa-rica",
-    ISO2: "CR",
-  },
-  {
-    Country: "Cuba",
-    Slug: "cuba",
-    ISO2: "CU",
-  },
-  {
     Country: "Ecuador",
     Slug: "ecuador",
     ISO2: "EC",
   },
-  {
-    Country: "El Salvador",
-    Slug: "el-salvador",
-    ISO2: "SV",
-  },
-  {
-    Country: "Guatemala",
-    Slug: "guatemala",
-    ISO2: "GT",
-  },
-  {
-    Country: "Haití",
-    Slug: "haiti",
-    ISO2: "HT",
-  },
-  {
-    Country: "Honduras",
-    Slug: "honduras",
-    ISO2: "HN",
-  },
-  {
-    Country: "México",
-    Slug: "mexico",
-    ISO2: "MX",
-  },
-  {
-    Country: "Nicaragua",
-    Slug: "nicaragua",
-    ISO2: "NI",
-  },
-  {
-    Country: "Panama",
-    Slug: "panama",
-    ISO2: "PA",
-  },
+
   {
     Country: "Paraguay",
     Slug: "paraguay",
     ISO2: "PY",
   },
   {
-    Country: "Perú",
+    Country: "Peru",
     Slug: "peru",
     ISO2: "PE",
   },
-  {
-    Country: "R. Dominicana",
-    Slug: "dominican-republic",
-    ISO2: "DO",
-  },
+
   {
     Country: "Uruguay",
     Slug: "uruguay",
@@ -98,5 +51,20 @@ export const countries = [
     Country: "Venezuela",
     Slug: "venezuela",
     ISO2: "VE",
+  },
+  {
+    Country: "Guyana",
+    Slug: "guyana",
+    ISO2: "GY",
+  },
+  {
+    Country: "French Guiana",
+    Slug: "french-guiana",
+    ISO2: "GF",
+  },
+  {
+    Country: "Suriname",
+    Slug: "suriname",
+    ISO2: "SR",
   },
 ];
