@@ -110,7 +110,7 @@ export const CountryPage = (props: CountryPageProps) => {
               <Box mr={4}>
                 <img
                   className={classes.countryImg}
-                  src={`${FLAG_PREFIX}${country}.jpg`}
+                  src={`${FLAG_PREFIX}${country}.png`}
                   alt={`Bandera de ${country}`}
                 />
               </Box>
