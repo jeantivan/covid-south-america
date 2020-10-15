@@ -1,5 +1,4 @@
 import {
-  fade,
   makeStyles,
   Paper,
   Table,
@@ -9,7 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
-import { Link, useNavigate } from "@reach/router";
+import { useNavigate } from "@reach/router";
 import React from "react";
 import { FLAG_PREFIX } from "../constants";
 import { LASummary, SummaryCountryResponse } from "../types";
@@ -74,7 +73,7 @@ export const CountryTable: React.FC<CountryTableProps> = ({ laSummary }) => {
                 <TableCell>
                   <img
                     className={classes.countryImg}
-                    src={`${FLAG_PREFIX}${pais.Slug}.jpg`}
+                    src={`${FLAG_PREFIX}${pais.Slug}.png`}
                     alt={`Bandera de ${pais.Country}`}
                   />
                 </TableCell>
