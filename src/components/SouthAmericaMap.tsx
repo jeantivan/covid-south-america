@@ -1,12 +1,13 @@
-import { makeStyles, Typography } from "@material-ui/core";
+import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
 import { useNavigate } from "@reach/router";
 import { Graticule, Mercator } from "@visx/geo";
 import { Group } from "@visx/group";
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
 import React, { useCallback } from "react";
 import * as topojson from "topojson-client";
+import { FLAG_PREFIX } from "../constants";
 import topology from "../south-america.json";
-import { LASummary } from "../types";
+import { SummaryCountryResponse } from "../types";
 
 export const background = "#f9f7e8";
 
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2),
-    minWidth: 100,
+    maxWidth: 200,
   },
   countryPath: {
     strokeWidth: 1,
@@ -28,9 +29,28 @@ const useStyles = makeStyles((theme) => ({
       fill: theme.palette.info.light,
     },
   },
+  guiana: {
+    fill: theme.palette.grey[600],
+    cursor: "not-allowed",
+    "&:hover": {
+      fill: theme.palette.grey[600],
+    },
+  },
+  bold: {
+    fontWeight: 700,
+  },
+  confirmed: {
+    color: theme.palette.info.main,
+  },
+  recovered: {
+    color: theme.palette.success.main,
+  },
+  deaths: {
+    color: theme.palette.error.main,
+  },
 }));
 
-type Properties = { type: string; country: string; slug: string };
+type Properties = { type: string; Country: string; Slug: string };
 
 interface FeatureShape {
   type: "Feature";
@@ -44,20 +64,18 @@ const southAmerica = topojson.feature(topology, topology.objects.units) as {
   features: FeatureShape[];
 };
 
-type TooltipData = Properties;
+type TooltipData = SummaryCountryResponse;
 
-interface SouthAmericaProps {
+interface SouthAmericaMapProps {
   width: number;
   height: number;
-  events?: boolean;
-  data?: LASummary;
+  dataCountries: SummaryCountryResponse[];
 }
 
-export const SouthAmericaMap: React.FC<SouthAmericaProps> = ({
+export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
   width,
   height,
-  events = false,
-  data,
+  dataCountries,
 }) => {
   const centerX = width / 2;
   const centerY = height / 2;
@@ -82,13 +100,19 @@ export const SouthAmericaMap: React.FC<SouthAmericaProps> = ({
   // tooltip handler
   const handleHover = useCallback(
     (feature: FeatureShape) => {
+      const countryData = dataCountries.find(
+        (country) => country.Slug === feature.properties.Slug
+      );
+
+      const tooltipData = countryData;
+
       showTooltip({
-        tooltipData: feature.properties,
+        tooltipData,
         tooltipLeft: 10,
         tooltipTop: 10,
       });
     },
-    [showTooltip]
+    [showTooltip, dataCountries]
   );
 
   return width < 10 ? null : (
@@ -113,23 +137,31 @@ export const SouthAmericaMap: React.FC<SouthAmericaProps> = ({
               graticule={(g) => mercator.path(g) || ""}
               stroke="rgba(33,33,33,0.05)"
             />
-            <Group top={20}>
-              {mercator.features.map(({ feature, path }) => (
-                <path
-                  key={feature.properties.country}
-                  d={path || ""}
-                  className={classes.countryPath}
-                  onMouseEnter={() => {
-                    handleHover(feature);
-                  }}
-                  onMouseLeave={() => {
-                    hideTooltip();
-                  }}
-                  onClick={() => {
-                    navigate(`/country/${feature.properties.slug}`);
-                  }}
-                />
-              ))}
+            <Group top={20} left={50}>
+              {mercator.features.map(({ feature, path }) =>
+                feature.properties.Slug === "french-guiana" ? (
+                  <path
+                    key={feature.properties.Country}
+                    d={path || ""}
+                    className={`${classes.countryPath} ${classes.guiana}`}
+                  />
+                ) : (
+                  <path
+                    key={feature.properties.Country}
+                    d={path || ""}
+                    className={classes.countryPath}
+                    onMouseEnter={() => {
+                      handleHover(feature);
+                    }}
+                    onMouseLeave={() => {
+                      hideTooltip();
+                    }}
+                    onClick={() => {
+                      navigate(`/country/${feature.properties.Slug}`);
+                    }}
+                  />
+                )
+              )}
             </Group>
           </g>
         )}
@@ -142,11 +174,50 @@ export const SouthAmericaMap: React.FC<SouthAmericaProps> = ({
             left={tooltipLeft}
             className={classes.tooltip}
           >
-            <Typography variant="h6" component="div">
-              {tooltipData.country}
-            </Typography>
-            <Typography component="div">{tooltipData.type}</Typography>
-            <Typography component="div">{tooltipData.slug}</Typography>
+            <Grid container spacing={1}>
+              <Grid item xs="auto">
+                <img
+                  width="32px"
+                  src={`${FLAG_PREFIX}${tooltipData.Slug}.png`}
+                  alt={`Bandera de ${tooltipData.Country}`}
+                />
+              </Grid>
+
+              <Grid item xs zeroMinWidth>
+                <Typography component="div" noWrap>
+                  {tooltipData.Country}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Box>
+              <Typography variant="body2">
+                <Typography
+                  component="span"
+                  className={`${classes.bold} ${classes.confirmed}`}
+                >
+                  Confirmed:
+                </Typography>{" "}
+                {tooltipData.TotalConfirmed.toLocaleString()}
+              </Typography>
+              <Typography variant="body2">
+                <Typography
+                  component="span"
+                  className={`${classes.bold} ${classes.recovered}`}
+                >
+                  Recovered:
+                </Typography>{" "}
+                {tooltipData.TotalRecovered.toLocaleString()}
+              </Typography>
+              <Typography variant="body2">
+                <Typography
+                  component="span"
+                  className={`${classes.bold} ${classes.deaths}`}
+                >
+                  Deaths:
+                </Typography>{" "}
+                {tooltipData.TotalDeaths.toLocaleString()}
+              </Typography>
+            </Box>
           </TooltipInPortal>
         </div>
       )}
