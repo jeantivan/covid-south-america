@@ -55,6 +55,7 @@ export const ColorModeProvider = ({ children }: { children: ReactNode }) => {
     if (!window.localStorage.getItem(COLOR_MODE_KEY)) {
       window.localStorage.setItem(COLOR_MODE_KEY, colorMode);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
