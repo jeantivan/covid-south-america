@@ -1,7 +1,7 @@
-import { Container, Box } from "@material-ui/core";
+import { Box, Container } from "@material-ui/core";
+import { Router } from "@reach/router";
 import React, { ReactNode } from "react";
 import { Navbar } from "./Navbar";
-import { Router } from "@reach/router";
 
 interface LayoutProps {
   children: ReactNode;
