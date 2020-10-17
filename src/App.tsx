@@ -29,10 +29,6 @@ import { HomePage } from "./pages/HomePage";
 function App() {
   const { colorMode } = useColorMode();
 
-  React.useEffect(() => {
-    console.log({ colorMode });
-  }, [colorMode]);
-
   return (
     <ThemeProvider
       theme={responsiveFontSizes(

@@ -6,7 +6,6 @@ import {
   makeStyles,
   Toolbar,
   Typography,
-  useTheme,
 } from "@material-ui/core";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
@@ -32,11 +31,6 @@ export const Navbar: React.FC = () => {
 
   const { colorMode, toogleColorMode } = useColorMode();
 
-  const theme = useTheme();
-
-  React.useEffect(() => {
-    console.log({ type: theme.palette.type });
-  }, [theme]);
   return (
     <AppBar position="static" color="inherit" elevation={0}>
       <Toolbar>
