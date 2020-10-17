@@ -1,28 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
+import { ColorModeProvider } from "./components/DarkMode";
 import * as serviceWorker from "./serviceWorker";
-import {
-  CssBaseline,
-  responsiveFontSizes,
-  ThemeProvider,
-  createMuiTheme,
-} from "@material-ui/core";
-
-const theme = responsiveFontSizes(
-  createMuiTheme({
-    palette: {
-      type: "dark",
-    },
-  })
-);
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <ColorModeProvider>
       <App />
-    </ThemeProvider>
+    </ColorModeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
