@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import { ColorModeProvider } from "./components/DarkMode";
+import { ColorModeProvider } from "./components/ColorMode";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(

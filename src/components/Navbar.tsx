@@ -12,7 +12,7 @@ import Brightness7Icon from "@material-ui/icons/Brightness7";
 import GithubIcon from "@material-ui/icons/GitHub";
 import { Link as ReachLink } from "@reach/router";
 import React from "react";
-import { useColorMode } from "./DarkMode";
+import { useColorMode } from "./ColorMode";
 
 const useStyles = makeStyles((theme) => ({
   root: {

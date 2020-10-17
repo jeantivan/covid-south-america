@@ -5,7 +5,7 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import React from "react";
-import { useColorMode } from "./components/DarkMode";
+import { useColorMode } from "./components/ColorMode";
 import { Layout } from "./components/Layout";
 import { CountryPage } from "./pages/CountryPage";
 import { HomePage } from "./pages/HomePage";
