@@ -5,6 +5,7 @@ import {
   Link,
   makeStyles,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
@@ -40,14 +41,20 @@ export const Navbar: React.FC = () => {
           </Link>
         </Typography>
         <Box mr={2}>
-          <IconButton
-            onClick={() => {
-              toogleColorMode();
-            }}
-            aria-label="Toogle color mode"
-          >
-            {colorMode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
-          </IconButton>
+          <Tooltip title="Toogle color mode" placement="bottom" arrow>
+            <IconButton
+              onClick={() => {
+                toogleColorMode();
+              }}
+              aria-label="Toogle color mode"
+            >
+              {colorMode === "light" ? (
+                <Brightness4Icon />
+              ) : (
+                <Brightness7Icon />
+              )}
+            </IconButton>
+          </Tooltip>
         </Box>
         <Box>
           <IconButton
