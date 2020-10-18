@@ -12,7 +12,6 @@ import {
   useTooltip,
   useTooltipInPortal,
 } from "@visx/tooltip";
-import { NumberValue } from "d3";
 import { bisector, extent, max } from "d3-array";
 import { timeFormat } from "d3-time-format";
 import React, { useCallback, useMemo } from "react";
