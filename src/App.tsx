@@ -9,22 +9,7 @@ import { useColorMode } from "./components/ColorMode";
 import { Layout } from "./components/Layout";
 import { CountryPage } from "./pages/CountryPage";
 import { HomePage } from "./pages/HomePage";
-
-// const themeLight = responsiveFontSizes(
-//   createMuiTheme({
-//     palette: {
-//       type: "light",
-//     },
-//   })
-// );
-
-// const themeDark = responsiveFontSizes(
-//   createMuiTheme({
-//     palette: {
-//       type: "dark",
-//     },
-//   })
-// );
+import orange from "@material-ui/core/colors/orange";
 
 function App() {
   const { colorMode } = useColorMode();
@@ -35,6 +20,7 @@ function App() {
         createMuiTheme({
           palette: {
             type: colorMode === "light" ? "light" : "dark",
+            primary: orange,
           },
         })
       )}
