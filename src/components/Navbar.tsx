@@ -1,6 +1,7 @@
 import {
   AppBar,
   Box,
+  Hidden,
   IconButton,
   Link,
   makeStyles,
@@ -33,14 +34,18 @@ export const Navbar: React.FC = () => {
   const { colorMode, toogleColorMode } = useColorMode();
 
   return (
-    <AppBar position="static" color="inherit" elevation={0}>
+    <AppBar
+      position="static"
+      color={colorMode === "light" ? "primary" : "inherit"}
+      elevation={0}
+    >
       <Toolbar>
         <Typography variant="h6" component="h1" className={classes.title}>
           <Link color="inherit" component={ReachLink} to="/">
-            Covid-19 Latinoamerica
+            Covid-19 in South America
           </Link>
         </Typography>
-        <Box mr={2}>
+        <Box>
           <Tooltip title="Toogle color mode" placement="bottom" arrow>
             <IconButton
               onClick={() => {
@@ -56,15 +61,17 @@ export const Navbar: React.FC = () => {
             </IconButton>
           </Tooltip>
         </Box>
-        <Box>
-          <IconButton
-            component="a"
-            href="https://github.com/jptivan53/covid-latam"
-            aria-label="Github profile"
-          >
-            <GithubIcon />
-          </IconButton>
-        </Box>
+        <Hidden smDown>
+          <Box ml={1}>
+            <IconButton
+              component="a"
+              href="https://github.com/jptivan53/"
+              aria-label="Github profile"
+            >
+              <GithubIcon />
+            </IconButton>
+          </Box>
+        </Hidden>
       </Toolbar>
     </AppBar>
   );
