@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
   countryPath: {
     strokeWidth: 1,
     stroke: theme.palette.background.paper,
+    strokeOpacity: 0.3,
     fill: theme.palette.grey[400],
     cursor: "pointer",
 
