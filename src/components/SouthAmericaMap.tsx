@@ -6,10 +6,8 @@ import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
 import React, { useCallback } from "react";
 import * as topojson from "topojson-client";
 import { FLAG_PREFIX } from "../constants";
-import topology from "../south-america.json";
+import topology from "../topojson/south-america.json";
 import { SummaryCountryResponse } from "../types";
-
-export const background = "#f9f7e8";
 
 const useStyles = makeStyles((theme) => ({
   tooltip: {
@@ -21,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   countryPath: {
     strokeWidth: 1,
-    stroke: background,
+    stroke: theme.palette.background.paper,
     fill: theme.palette.grey[400],
     cursor: "pointer",
 
@@ -47,6 +45,13 @@ const useStyles = makeStyles((theme) => ({
   },
   deaths: {
     color: theme.palette.error.main,
+  },
+  rect: {
+    fill: theme.palette.background.paper,
+  },
+  graticule: {
+    stroke: theme.palette.getContrastText(theme.palette.background.default),
+    strokeOpacity: 0.3,
   },
 }));
 
@@ -122,8 +127,8 @@ export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
         y={0}
         width={width}
         height={height}
-        fill={background}
         rx={14}
+        className={classes.rect}
       />
       <Mercator<FeatureShape>
         data={southAmerica.features}
@@ -135,7 +140,8 @@ export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
           <g width={width} height={height}>
             <Graticule
               graticule={(g) => mercator.path(g) || ""}
-              stroke="rgba(33,33,33,0.05)"
+              className={classes.graticule}
+              strokeDasharray="3,3"
             />
             <Group top={20} left={50}>
               {mercator.features.map(({ feature, path }) =>
