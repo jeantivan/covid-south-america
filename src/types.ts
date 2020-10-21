@@ -1,5 +1,3 @@
-export type Status = "Confirmed" | "Recovered" | "Deaths";
-
 export type Summary = {
   NewConfirmed: number;
   NewDeaths: number;
