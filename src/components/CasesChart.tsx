@@ -51,6 +51,21 @@ const useStyles = makeStyles((theme) => ({
     background: "#35477d",
     position: "absolute",
   },
+  Confirmed: {
+    stroke: theme.palette.info.main,
+    fill: theme.palette.info.light,
+    fillOpacity: 0.3,
+  },
+  Recovered: {
+    stroke: theme.palette.success.main,
+    fill: theme.palette.success.light,
+    fillOpacity: 0.3,
+  },
+  Deaths: {
+    stroke: theme.palette.error.main,
+    fill: theme.palette.error.light,
+    fillOpacity: 0.3,
+  },
 }));
 
 export const CasesChart: React.FC<CasesChartProps> = ({
@@ -186,10 +201,8 @@ export const CasesChart: React.FC<CasesChartProps> = ({
             x={(d) => xScale(getXValue(d)) as number}
             y={(d) => yScale(getYValue(d)) as number}
             yScale={yScale}
-            strokeWidth={1.5}
-            stroke={theme.palette[colorDataKey].main}
-            fill={theme.palette[colorDataKey].light}
-            fillOpacity={0.3}
+            strokeWidth={2}
+            className={classes[dataKey]}
             curve={curveMonotoneX}
           />
           <AxisLeft
