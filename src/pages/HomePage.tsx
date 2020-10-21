@@ -12,10 +12,10 @@ import { RouteComponentProps } from "@reach/router";
 import { ParentSize } from "@visx/responsive";
 import { timeFormat } from "d3-time-format";
 import React, { useState } from "react";
-import { Helmet } from "react-helmet";
 import useSWR from "swr";
 import { AspectRatioBox } from "../components/AspectRatioBox";
 import { CountryItem } from "../components/CountryItem";
+import { Seo } from "../components/Seo";
 import { SouthAmericaMap } from "../components/SouthAmericaMap";
 import { GlobalSummaryResponse } from "../types";
 import { computeLASummary, fetcher } from "../utils";
@@ -48,9 +48,7 @@ export const HomePage = (props: RouteComponentProps) => {
 
   return (
     <Box component="section">
-      <Helmet>
-        <title>Covid 19 en Latinoamérica </title>
-      </Helmet>
+      <Seo title="Home" />
       <Grid container spacing={2}>
         <Grid item xs={12} lg={3}>
           <Box mb={2} minHeight={48}>
