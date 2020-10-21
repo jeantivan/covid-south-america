@@ -1,12 +1,9 @@
-import { countries } from "./countries";
+import { countries } from "./constants";
 import {
   GlobalSummaryResponse,
   LASummary,
   SummaryCountryResponse,
 } from "./types";
-
-let round2decimal = (num: number) =>
-  Math.round((num + Number.EPSILON) * 100) / 100;
 
 export const formatDate = (
   date: string,
@@ -20,12 +17,20 @@ export const formatDate = (
   return d.toLocaleDateString("ve-ES", options);
 };
 
-export const formatTotal = (total: number): string =>
-  total >= 10 ** 6
-    ? round2decimal(total / 10 ** 6) + " M"
-    : total >= 10 ** 5 && total <= 10 ** 6 - 1
-    ? Math.round(total / 10 ** 3) + " k"
-    : Number(total).toLocaleString("es-ES");
+export const formatTotal = (total: number): string => {
+  let formatedTotal;
+
+  if (total >= 10 ** 6) {
+    formatedTotal =
+      Math.round((total / 10 ** 6 + Number.EPSILON) * 100) / 100 + " M";
+  } else if (total >= 10 ** 4 && total <= 10 ** 6 - 1) {
+    formatedTotal = Math.round(total / 10 ** 3) + " k";
+  } else {
+    formatedTotal = total.toLocaleString();
+  }
+
+  return formatedTotal;
+};
 
 export const fetcher = (input: RequestInfo, init?: RequestInit | undefined) =>
   fetch(input, init).then((res) => res.json());
@@ -113,5 +118,5 @@ export const getCountryNameBySlug = (slug: string | undefined) => {
     return "";
   }
 
-  return fixCountryName(country.Country);
+  return country.Country;
 };
