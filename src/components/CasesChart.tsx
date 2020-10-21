@@ -2,7 +2,7 @@ import { fade, makeStyles, useTheme } from "@material-ui/core";
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { curveMonotoneX } from "@visx/curve";
 import { localPoint } from "@visx/event";
-import { GridColumns, GridRows } from "@visx/grid";
+import { Grid } from "@visx/grid";
 import { Group } from "@visx/group";
 import { scaleLinear, scaleTime } from "@visx/scale";
 import { AreaClosed, Bar, Line } from "@visx/shape";
@@ -45,11 +45,20 @@ const useStyles = makeStyles((theme) => ({
       fill: theme.palette.getContrastText(theme.palette.background.paper),
     },
   },
+  rect: {
+    fill: theme.palette.background.paper,
+  },
   tooltip: {
     zIndex: 2,
     borderRadius: "50%",
     background: "#35477d",
     position: "absolute",
+  },
+  grid: {
+    strokeDasharray: "3,3",
+    stroke: theme.palette.getContrastText(theme.palette.background.default),
+    strokeOpacity: 0.3,
+    pointerEvents: "none",
   },
   Confirmed: {
     stroke: theme.palette.info.main,
@@ -169,31 +178,16 @@ export const CasesChart: React.FC<CasesChartProps> = ({
             y={0}
             width={xMax}
             height={yMax}
-            fill={theme.palette.background.paper}
+            className={classes.rect}
           />
-          <GridRows
-            scale={yScale}
+          <Grid
+            xScale={xScale}
+            yScale={yScale}
             width={xMax}
-            strokeDasharray="3,3"
-            stroke={fade(
-              theme.palette.getContrastText(theme.palette.background.default),
-              0.8
-            )}
-            strokeOpacity={0.3}
-            pointerEvents="none"
-            numTicks={width < 600 ? 4 : 5}
-          />
-          <GridColumns
-            scale={xScale}
             height={yMax}
-            strokeDasharray="3,3"
-            stroke={fade(
-              theme.palette.getContrastText(theme.palette.background.default),
-              0.8
-            )}
-            strokeOpacity={0.3}
-            pointerEvents="none"
-            numTicks={width < 600 ? 4 : undefined}
+            numTicksRows={width < 600 ? 4 : 5}
+            numTicksColumns={width < 600 ? 4 : undefined}
+            className={classes.grid}
           />
 
           <AreaClosed<CountryResponse>
