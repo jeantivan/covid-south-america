@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Grid,
   makeStyles,
   Typography,
@@ -7,7 +8,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import { Redirect, RouteComponentProps } from "@reach/router";
+import { Link, Redirect, RouteComponentProps } from "@reach/router";
 import { ParentSize } from "@visx/responsive";
 import { timeFormat } from "d3-time-format";
 import React from "react";
@@ -79,7 +80,13 @@ export const CountryPage = (props: CountryPageProps) => {
     <Box>
       <Seo title={`Cases in: ${countryName}`} />
 
-      <Box display="flex" mb={4} component="section" id="title-section">
+      <Box
+        display="flex"
+        alignItems="center"
+        mb={4}
+        component="section"
+        id="title-section"
+      >
         <div className={classes.imgContainer}>
           <img
             className={classes.countryImg}
@@ -105,7 +112,7 @@ export const CountryPage = (props: CountryPageProps) => {
                   </Typography>
                 </Grid>
                 {casesType.map((caseType: CasesType) => (
-                  <Grid item xs key={`summary-${caseType}`}>
+                  <Grid item xs={12} sm key={`summary-${caseType}`}>
                     <Typography variant="h6" className={classes[caseType]}>
                       {caseType}
                     </Typography>
@@ -167,6 +174,16 @@ export const CountryPage = (props: CountryPageProps) => {
                   </Grid>
                 </Grid>
               ))}
+              <Grid item xs={12}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  component={Link}
+                  to="/"
+                >
+                  Go to home
+                </Button>
+              </Grid>
             </Grid>
           </Box>
         </>
