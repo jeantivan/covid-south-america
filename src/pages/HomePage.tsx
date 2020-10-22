@@ -11,7 +11,7 @@ import {
 import MapIcon from "@material-ui/icons/Map";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 import { Skeleton } from "@material-ui/lab";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps } from "react-router-dom";
 import { ParentSize } from "@visx/responsive";
 import { timeFormat } from "d3-time-format";
 import React, { useState } from "react";

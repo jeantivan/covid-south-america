@@ -8,10 +8,15 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import { Link, Redirect, RouteComponentProps } from "@reach/router";
 import { ParentSize } from "@visx/responsive";
 import { timeFormat } from "d3-time-format";
 import React from "react";
+import {
+  Link,
+  Redirect,
+  RouteComponentProps,
+  useParams,
+} from "react-router-dom";
 import useSWR from "swr";
 import { AspectRatioBox } from "../components/AspectRatioBox";
 import { CasesChart } from "../components/CasesChart";
@@ -49,18 +54,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface CountryPageProps extends RouteComponentProps {
-  country?: string;
-}
-
 const margin = { top: 16, right: 16, bottom: 40, left: 45 };
 
 type CasesType = "Confirmed" | "Recovered" | "Deaths";
 
 const casesType: Array<CasesType> = ["Confirmed", "Recovered", "Deaths"];
 
-export const CountryPage = (props: CountryPageProps) => {
-  const { country } = props;
+export const CountryPage = (props: RouteComponentProps) => {
+  const { country } = useParams<{ country: string }>();
+
   const countryName = getCountryNameBySlug(country);
   const classes = useStyles();
   const theme = useTheme();
@@ -72,7 +74,7 @@ export const CountryPage = (props: CountryPageProps) => {
   );
 
   if (!countryName) {
-    return <Redirect to="/404" noThrow />;
+    return <Redirect to="/404" />;
   }
 
   const lastUpdate = data ? data[data?.length - 1] : ({} as CountryResponse);

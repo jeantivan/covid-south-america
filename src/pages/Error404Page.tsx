@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from "@material-ui/core";
-import { Link, RouteComponentProps } from "@reach/router";
+import { Link, RouteComponentProps } from "react-router-dom";
 import React from "react";
 import { Seo } from "../components/Seo";
 

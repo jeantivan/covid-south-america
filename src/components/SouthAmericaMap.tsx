@@ -1,9 +1,9 @@
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
-import { useNavigate } from "@reach/router";
 import { Graticule, Mercator } from "@visx/geo";
 import { Group } from "@visx/group";
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
 import React, { useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import * as topojson from "topojson-client";
 import { FLAG_PREFIX } from "../constants";
 import topology from "../topojson/south-america.json";
@@ -88,7 +88,7 @@ export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
   const scale = (width / 550) * 100;
 
   const classes = useStyles();
-  const navigate = useNavigate();
+  const history = useHistory();
 
   const { containerRef, TooltipInPortal } = useTooltipInPortal({
     // when tooltip containers are scrolled, this will correctly update the Tooltip position
@@ -164,7 +164,7 @@ export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
                       hideTooltip();
                     }}
                     onClick={() => {
-                      navigate(`/country/${feature.properties.Slug}`);
+                      history.push(`/country/${feature.properties.Slug}`);
                     }}
                   />
                 )

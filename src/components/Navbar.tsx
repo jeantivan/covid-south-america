@@ -12,7 +12,7 @@ import {
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import GithubIcon from "@material-ui/icons/GitHub";
-import { Link as ReachLink } from "@reach/router";
+import { Link as RRLink } from "react-router-dom";
 import React from "react";
 import { useColorMode } from "./ColorMode";
 
@@ -42,7 +42,7 @@ export const Navbar: React.FC = () => {
     >
       <Toolbar>
         <Typography variant="h6" component="h1" className={classes.title}>
-          <Link color="inherit" component={ReachLink} to="/">
+          <Link color="inherit" component={RRLink} to="/">
             Covid-19 in South America
           </Link>
         </Typography>
