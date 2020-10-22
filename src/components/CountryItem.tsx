@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
 
     "&:hover": {
-      borderColor: theme.palette.info.main,
+      borderColor: theme.palette.primary.main,
       boxShadow: theme.shadows[3],
     },
   },

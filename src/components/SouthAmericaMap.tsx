@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
 
     "&:hover": {
-      fill: theme.palette.info.light,
+      fill: theme.palette.primary.main,
     },
   },
   guiana: {
