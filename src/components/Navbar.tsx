@@ -35,6 +35,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <AppBar
+      id="header"
       position="static"
       color={colorMode === "light" ? "primary" : "inherit"}
       elevation={0}

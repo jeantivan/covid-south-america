@@ -9,14 +9,15 @@ import React from "react";
 const useStyles = makeStyles((theme) => ({
   footer: {
     background: theme.palette.background.paper,
+    padding: theme.spacing(3, 0),
   },
 }));
 export const Footer: React.FC = () => {
   const classes = useStyles();
   return (
-    <footer className={classes.footer}>
+    <footer id="footer" className={classes.footer}>
       <Container>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography align="center">
               Data from{" "}
