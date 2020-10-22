@@ -1,160 +1,179 @@
 import {
   Box,
-  CircularProgress,
   Grid,
   makeStyles,
-  MenuItem,
-  TextField,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
 import { RouteComponentProps } from "@reach/router";
 import { ParentSize } from "@visx/responsive";
-import React, { useState } from "react";
+import { timeFormat } from "d3-time-format";
+import React from "react";
 import useSWR from "swr";
 import { AspectRatioBox } from "../components/AspectRatioBox";
-import { Chart } from "../components/Chart";
+import { CasesChart } from "../components/CasesChart";
+import { Seo } from "../components/Seo";
 import { FLAG_PREFIX } from "../constants";
-import { CountryResponse, Status } from "../types";
+import { CountryResponse } from "../types";
 import { fetcher, getCountryNameBySlug } from "../utils";
-import { timeFormat } from "d3-time-format";
-import { Helmet } from "react-helmet";
+
+const useStyles = makeStyles((theme) => ({
+  imgContainer: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up("sm")]: {
+      marginRight: theme.spacing(4),
+    },
+  },
+  countryImg: {
+    borderRadius: theme.spacing(0.5),
+    width: 64,
+    objectFit: "cover",
+    [theme.breakpoints.up("md")]: {
+      width: 80,
+    },
+  },
+  Confirmed: {
+    color: theme.palette.info.main,
+  },
+  Recovered: {
+    color: theme.palette.success.main,
+  },
+  Deaths: {
+    color: theme.palette.error.main,
+  },
+  result: {
+    fontWeight: 700,
+  },
+}));
 
 interface CountryPageProps extends RouteComponentProps {
   country?: string;
 }
 
-const useStyles = makeStyles((theme) => ({
-  countryImg: {
-    borderRadius: theme.spacing(0.5),
-    width: 64,
-    objectFit: "cover",
-  },
-}));
+const margin = { top: 16, right: 16, bottom: 40, left: 45 };
+
+type CasesType = "Confirmed" | "Recovered" | "Deaths";
+
+const casesType: Array<CasesType> = ["Confirmed", "Recovered", "Deaths"];
 
 export const CountryPage = (props: CountryPageProps) => {
   const { country } = props;
   const countryName = getCountryNameBySlug(country);
-  let aspectRatioBoxContent, lastUpdate;
 
   const classes = useStyles();
   const theme = useTheme();
-
-  const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
-
-  const [status, setStatus] = useState<Status>("Confirmed");
+  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
   const { data, error } = useSWR<CountryResponse[]>(
     `https://api.covid19api.com/dayone/country/${country}`,
     fetcher
   );
 
-  if (error) {
-    aspectRatioBoxContent = (
-      <Box display="flex" alignItems="center" justifyContent="center">
-        <Typography variant="h5">Something wen't wrong</Typography>
-      </Box>
-    );
-  }
-
-  if (!data) {
-    aspectRatioBoxContent = (
-      <Box
-        bgcolor="#303030"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (data) {
-    lastUpdate = new Date(data[data.length - 1].Date);
-    aspectRatioBoxContent = (
-      <ParentSize>
-        {({ width, height }) => (
-          <Chart status={status} width={width} height={height} data={data} />
-        )}
-      </ParentSize>
-    );
-  }
-
-  const handleChange = (e: any) => {
-    switch (e.target.value) {
-      case "Confirmed":
-        setStatus("Confirmed");
-        break;
-      case "Deaths":
-        setStatus("Deaths");
-        break;
-      case "Recovered":
-        setStatus("Recovered");
-        break;
-      default:
-        setStatus("Confirmed");
-        break;
-    }
-  };
+  const lastUpdate = data ? data[data?.length - 1] : ({} as CountryResponse);
   return (
-    <Box component="section" my={4}>
-      <Helmet>
-        <title>Casos en {countryName} | Covid 19 en Latinoamérica </title>
-      </Helmet>
-      <Grid container spacing={2}>
-        <Grid item container xs={12}>
-          <Grid xs={12} md={9} item container alignItems="center">
-            <Box display="flex" alignItems="center">
-              <Box mr={4}>
-                <img
-                  className={classes.countryImg}
-                  src={`${FLAG_PREFIX}${country}.png`}
-                  alt={`Bandera de ${country}`}
-                />
-              </Box>
-              <Box>
-                <Typography variant="h4">{countryName}</Typography>
-                {lastUpdate && (
-                  <Typography variant="body2" color="textSecondary">
-                    {timeFormat("%d %B, '%Y")(lastUpdate)}
+    <Box>
+      <Seo title={`Cases in: ${countryName}`} />
+
+      <Box display="flex" mb={4} component="section" id="title-section">
+        <div className={classes.imgContainer}>
+          <img
+            className={classes.countryImg}
+            src={`${FLAG_PREFIX}${country}.png`}
+            alt={`Bandera de ${country}`}
+          />
+        </div>
+        <Box flex={1}>
+          <Typography variant="h4" component="h2" noWrap>
+            {countryName}
+          </Typography>
+        </Box>
+      </Box>
+
+      {!error ? (
+        <>
+          <Box component="section" id="general-summary-section">
+            <Grid container spacing={4}>
+              <Grid xs={12} item container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="h5" component="h3">
+                    General summary
                   </Typography>
-                )}
-              </Box>
-            </Box>
-          </Grid>
-          <Grid xs={12} md={3} item container alignItems="center">
-            <TextField
-              id="select-status"
-              name="status"
-              label="Ver:"
-              select
-              fullWidth
-              variant="outlined"
-              value={status}
-              onChange={handleChange}
-            >
-              <MenuItem value="Confirmed">Confirmados</MenuItem>
-              <MenuItem value="Recovered">Recuperados</MenuItem>
-              <MenuItem value="Deaths">Muertos</MenuItem>
-            </TextField>
-          </Grid>
+                </Grid>
+                {casesType.map((caseType: CasesType) => (
+                  <Grid item xs key={`summary-${caseType}`}>
+                    <Typography variant="h6" className={classes[caseType]}>
+                      {caseType}
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      component="p"
+                      className={classes.result}
+                    >
+                      {data ? (
+                        lastUpdate[caseType].toLocaleString()
+                      ) : (
+                        <Skeleton />
+                      )}
+                    </Typography>
+                  </Grid>
+                ))}
+                {data ? (
+                  <Grid item xs={12}>
+                    <Typography color="textSecondary">
+                      Last update:{" "}
+                      {timeFormat("%b %d, '%Y")(new Date(lastUpdate.Date))}
+                    </Typography>
+                  </Grid>
+                ) : null}
+              </Grid>
+            </Grid>
+          </Box>
+          <Box component="section" id="chart-section">
+            <Grid container spacing={4}>
+              {casesType.map((caseType: CasesType) => (
+                <Grid item xs={12} key={`chart-${caseType}`}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <Typography variant="h5" component="h3">
+                        {caseType} cases
+                      </Typography>
+                    </Grid>
+                    <Grid xs={12} item>
+                      <AspectRatioBox ratio={isMobile ? 3 / 4 : 9 / 21}>
+                        {!data ? (
+                          <Skeleton variant="rect" height="100%" />
+                        ) : (
+                          <Box height="100%">
+                            <ParentSize>
+                              {({ width, height }) => (
+                                <CasesChart
+                                  width={width}
+                                  height={height}
+                                  data={data}
+                                  dataKey={caseType}
+                                  margin={margin}
+                                />
+                              )}
+                            </ParentSize>
+                          </Box>
+                        )}
+                      </AspectRatioBox>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        </>
+      ) : (
+        <Grid container justify="center" alignItems="center">
+          <Typography variant="h3" align="center">
+            Something wen't wrong
+          </Typography>
         </Grid>
-        <Grid item md={7}>
-          <AspectRatioBox ratio={!isMobile ? 9 / 16 : 9 / 21}>
-            <Box height="100%">{aspectRatioBoxContent}</Box>
-          </AspectRatioBox>
-        </Grid>
-        <Grid item xs={12} md={5}>
-          <Box
-            height="calc(100% - 70px)"
-            mt="30px"
-            ml="50px"
-            bgcolor="#142fa2"
-          ></Box>
-        </Grid>
-      </Grid>
+      )}
     </Box>
   );
 };
