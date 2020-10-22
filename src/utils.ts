@@ -114,7 +114,7 @@ export const getCountryNameBySlug = (slug: string | undefined) => {
 
   const country = countries.find((c) => c.Slug === slug);
 
-  if (!country) {
+  if (!country || country.Slug === "french-guiana") {
     return "";
   }
 
