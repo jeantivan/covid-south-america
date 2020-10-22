@@ -3,6 +3,7 @@ import {
   Grid,
   IconButton,
   makeStyles,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import MapIcon from "@material-ui/icons/Map";
@@ -50,6 +51,11 @@ export const HomePage = (props: RouteComponentProps) => {
     <Box component="section">
       <Seo title="Home" />
       <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography variant="h3" component="h2">
+            Cases in South America
+          </Typography>
+        </Grid>
         <Grid item xs={12} lg={3}>
           <Box mb={2} minHeight={48}>
             <Typography variant="h5" component="h3">
@@ -57,7 +63,11 @@ export const HomePage = (props: RouteComponentProps) => {
             </Typography>
           </Box>
           <Box mb={2}>
-            <Typography variant="h5" className={classes.confirmed}>
+            <Typography
+              variant="h5"
+              component="h4"
+              className={classes.confirmed}
+            >
               Confirmed
             </Typography>
             <Typography variant="h3" component="p" className={classes.result}>
@@ -69,7 +79,11 @@ export const HomePage = (props: RouteComponentProps) => {
             </Typography>
           </Box>
           <Box mb={2}>
-            <Typography variant="h5" className={classes.recovered}>
+            <Typography
+              variant="h5"
+              component="h4"
+              className={classes.recovered}
+            >
               Recovered
             </Typography>
             <Typography variant="h3" component="p" className={classes.result}>
@@ -81,7 +95,7 @@ export const HomePage = (props: RouteComponentProps) => {
             </Typography>
           </Box>
           <Box mb={2}>
-            <Typography variant="h5" className={classes.deaths}>
+            <Typography variant="h5" component="h4" className={classes.deaths}>
               Deaths
             </Typography>
             <Typography variant="h3" component="p" className={classes.result}>
@@ -109,14 +123,20 @@ export const HomePage = (props: RouteComponentProps) => {
               </Typography>
             </Box>
             <Box>
-              <IconButton
-                aria-label={viewMap ? "See map" : "See country list"}
-                onClick={() => {
-                  setViewMap((state) => !state);
-                }}
+              <Tooltip
+                title={viewMap ? "See country list" : "See map"}
+                placement="top"
+                arrow
               >
-                {viewMap ? <MapIcon /> : <ViewModuleIcon />}
-              </IconButton>
+                <IconButton
+                  aria-label={viewMap ? "See country list" : "See map"}
+                  onClick={() => {
+                    setViewMap((state) => !state);
+                  }}
+                >
+                  {viewMap ? <ViewModuleIcon /> : <MapIcon />}
+                </IconButton>
+              </Tooltip>
             </Box>
           </Box>
           <Box>
