@@ -7,7 +7,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import { RouteComponentProps } from "@reach/router";
+import { Redirect, RouteComponentProps } from "@reach/router";
 import { ParentSize } from "@visx/responsive";
 import { timeFormat } from "d3-time-format";
 import React from "react";
@@ -61,7 +61,6 @@ const casesType: Array<CasesType> = ["Confirmed", "Recovered", "Deaths"];
 export const CountryPage = (props: CountryPageProps) => {
   const { country } = props;
   const countryName = getCountryNameBySlug(country);
-
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
@@ -70,6 +69,10 @@ export const CountryPage = (props: CountryPageProps) => {
     `https://api.covid19api.com/dayone/country/${country}`,
     fetcher
   );
+
+  if (!countryName) {
+    return <Redirect to="/404" noThrow />;
+  }
 
   const lastUpdate = data ? data[data?.length - 1] : ({} as CountryResponse);
   return (
