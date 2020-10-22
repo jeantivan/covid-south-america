@@ -144,7 +144,7 @@ export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
               className={classes.graticule}
               strokeDasharray="3,3"
             />
-            <Group top={20} left={50}>
+            <Group top={20}>
               {mercator.features.map(({ feature, path }) =>
                 feature.properties.Slug === "french-guiana" ? (
                   <path
