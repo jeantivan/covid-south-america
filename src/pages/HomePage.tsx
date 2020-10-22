@@ -5,6 +5,8 @@ import {
   makeStyles,
   Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@material-ui/core";
 import MapIcon from "@material-ui/icons/Map";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
@@ -38,13 +40,14 @@ const useStyles = makeStyles((theme) => ({
 
 export const HomePage = (props: RouteComponentProps) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
   const [viewMap, setViewMap] = useState(true);
   const { data: globalData } = useSWR<GlobalSummaryResponse>(
     `https://api.covid19api.com/summary`,
     fetcher
   );
-  //const laSummary = useMemo(() => computeLASummary(globalData), [globalData]);
   const laSummary = computeLASummary(globalData);
 
   return (
@@ -57,72 +60,78 @@ export const HomePage = (props: RouteComponentProps) => {
           </Typography>
         </Grid>
         <Grid item xs={12} lg={3}>
-          <Box mb={2} minHeight={48}>
-            <Typography variant="h5" component="h3">
-              Summary
-            </Typography>
-          </Box>
-          <Box mb={2}>
-            <Typography
-              variant="h5"
-              component="h4"
-              className={classes.confirmed}
-            >
-              Confirmed
-            </Typography>
-            <Typography variant="h3" component="p" className={classes.result}>
-              {laSummary ? (
-                laSummary.Summary.TotalConfirmed.toLocaleString()
-              ) : (
-                <Skeleton />
-              )}
-            </Typography>
-          </Box>
-          <Box mb={2}>
-            <Typography
-              variant="h5"
-              component="h4"
-              className={classes.recovered}
-            >
-              Recovered
-            </Typography>
-            <Typography variant="h3" component="p" className={classes.result}>
-              {laSummary ? (
-                laSummary.Summary.TotalRecovered.toLocaleString()
-              ) : (
-                <Skeleton />
-              )}
-            </Typography>
-          </Box>
-          <Box mb={2}>
-            <Typography variant="h5" component="h4" className={classes.deaths}>
-              Deaths
-            </Typography>
-            <Typography variant="h3" component="p" className={classes.result}>
-              {laSummary ? (
-                laSummary.Summary.TotalDeaths.toLocaleString()
-              ) : (
-                <Skeleton />
-              )}
-            </Typography>
-          </Box>
-          {!laSummary ? null : (
-            <Box>
-              <Typography color="textSecondary">
-                Last update:{" "}
-                {timeFormat("%b %d, '%Y")(new Date(laSummary.Date))}
+          <Grid container spacing={2}>
+            <Grid item xs>
+              <Typography variant="h5" component="h3">
+                Summary
               </Typography>
-            </Box>
-          )}
+            </Grid>
+            <Grid item xs={12} sm lg={12}>
+              <Typography
+                variant="h5"
+                component="h4"
+                className={classes.confirmed}
+              >
+                Confirmed
+              </Typography>
+              <Typography variant="h3" component="p" className={classes.result}>
+                {laSummary ? (
+                  laSummary.Summary.TotalConfirmed.toLocaleString()
+                ) : (
+                  <Skeleton />
+                )}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm lg={12}>
+              <Typography
+                variant="h5"
+                component="h4"
+                className={classes.recovered}
+              >
+                Recovered
+              </Typography>
+              <Typography variant="h3" component="p" className={classes.result}>
+                {laSummary ? (
+                  laSummary.Summary.TotalRecovered.toLocaleString()
+                ) : (
+                  <Skeleton />
+                )}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm lg={12}>
+              <Typography
+                variant="h5"
+                component="h4"
+                className={classes.deaths}
+              >
+                Deaths
+              </Typography>
+              <Typography variant="h3" component="p" className={classes.result}>
+                {laSummary ? (
+                  laSummary.Summary.TotalDeaths.toLocaleString()
+                ) : (
+                  <Skeleton />
+                )}
+              </Typography>
+            </Grid>
+            {!laSummary ? null : (
+              <Grid item xs={12}>
+                <Typography color="textSecondary">
+                  Last update:{" "}
+                  {timeFormat("%b %d, '%Y")(new Date(laSummary.Date))}
+                </Typography>
+              </Grid>
+            )}
+          </Grid>
         </Grid>
         <Grid item xs={12} lg={9}>
-          <Box mb={2} display="flex">
-            <Box flex={1}>
+          <Grid container spacing={2}>
+            <Grid item xs>
               <Typography variant="h5" component="h3">
                 Countries
               </Typography>
-            </Box>
-            <Box>
+            </Grid>
+            <Grid item xs="auto">
               <Tooltip
                 title={viewMap ? "See country list" : "See map"}
                 placement="top"
@@ -137,11 +146,11 @@ export const HomePage = (props: RouteComponentProps) => {
                   {viewMap ? <ViewModuleIcon /> : <MapIcon />}
                 </IconButton>
               </Tooltip>
-            </Box>
-          </Box>
-          <Box>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
             {viewMap ? (
-              <AspectRatioBox ratio={0.65}>
+              <AspectRatioBox ratio={isMobile ? 1 : 0.65}>
                 <Box height="100%">
                   {!laSummary ? (
                     <Skeleton variant="rect" width="100%" height="100%" />
@@ -168,20 +177,16 @@ export const HomePage = (props: RouteComponentProps) => {
                   ))
                 ) : (
                   <>
-                    <Grid item xs={12} md={4}>
-                      <Skeleton variant="rect" height="80px" />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <Skeleton variant="rect" height="80px" />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <Skeleton variant="rect" height="80px" />
-                    </Grid>
+                    {Array.from({ length: 6 }, (_, i) => (
+                      <Grid item xs={12} md={4} key={`skeleton-${i}`}>
+                        <Skeleton variant="rect" height="80px" />
+                      </Grid>
+                    ))}
                   </>
                 )}
               </Grid>
             )}
-          </Box>
+          </Grid>
         </Grid>
       </Grid>
     </Box>
