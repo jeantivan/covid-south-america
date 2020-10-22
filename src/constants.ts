@@ -50,7 +50,7 @@ export const countries = [
     ISO2: "UY",
   },
   {
-    Country: "Venezuela",
+    Country: "Venezuela (Bolivarian Republic)",
     Slug: "venezuela",
     ISO2: "VE",
   },
