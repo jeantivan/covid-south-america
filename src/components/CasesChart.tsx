@@ -1,4 +1,4 @@
-import { fade, makeStyles, useTheme } from "@material-ui/core";
+import { fade, makeStyles, Paper, useTheme } from "@material-ui/core";
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { curveMonotoneX } from "@visx/curve";
 import { localPoint } from "@visx/event";
@@ -29,13 +29,6 @@ const getDataKeyValue = (dataKey: DataKeys) => (d: CountryResponse) =>
 const bisectDate = bisector<CountryResponse, Date>((p) => new Date(p.Date))
   .left;
 
-type CasesChartProps = {
-  width: number;
-  height: number;
-  data: CountryResponse[];
-  dataKey: DataKeys;
-};
-
 type TooltipData = CountryResponse;
 
 const useStyles = makeStyles((theme) => ({
@@ -46,7 +39,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   rect: {
-    fill: theme.palette.background.paper,
+    fill:
+      theme.palette.type === "light"
+        ? theme.palette.grey[100]
+        : theme.palette.background.paper,
   },
   tooltip: {
     zIndex: 2,
@@ -56,9 +52,12 @@ const useStyles = makeStyles((theme) => ({
   },
   grid: {
     strokeDasharray: "3,3",
-    stroke: theme.palette.getContrastText(theme.palette.background.default),
-    strokeOpacity: 0.3,
+    stroke: theme.palette.getContrastText(theme.palette.background.paper),
     pointerEvents: "none",
+    "& > *": {
+      stroke: theme.palette.getContrastText(theme.palette.background.paper),
+      strokeOpacity: 0.3,
+    },
   },
   Confirmed: {
     stroke: theme.palette.info.main,
@@ -77,14 +76,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+type CasesChartProps = {
+  width: number;
+  height: number;
+  data: CountryResponse[];
+  dataKey: DataKeys;
+  margin: { top: number; right: number; bottom: number; left: number };
+};
+
 export const CasesChart: React.FC<CasesChartProps> = ({
   width,
   height,
   data,
   dataKey,
+  margin,
 }) => {
   const getYValue = getDataKeyValue(dataKey);
-  const margin = { top: 16, right: 0, bottom: 40, left: 45 };
   const classes = useStyles();
   const theme = useTheme();
 
@@ -170,16 +177,9 @@ export const CasesChart: React.FC<CasesChartProps> = ({
   );
 
   return width < 10 ? null : (
-    <div>
+    <Paper>
       <svg ref={containerRef} width={width} height={height}>
         <Group left={margin.left} top={margin.top}>
-          <rect
-            x={0}
-            y={0}
-            width={xMax}
-            height={yMax}
-            className={classes.rect}
-          />
           <Grid
             xScale={xScale}
             yScale={yScale}
@@ -189,7 +189,6 @@ export const CasesChart: React.FC<CasesChartProps> = ({
             numTicksColumns={width < 600 ? 4 : undefined}
             className={classes.grid}
           />
-
           <AreaClosed<CountryResponse>
             data={data}
             x={(d) => xScale(getXValue(d)) as number}
@@ -281,6 +280,6 @@ export const CasesChart: React.FC<CasesChartProps> = ({
           </TooltipWithBounds>
         </div>
       )}
-    </div>
+    </Paper>
   );
 };
