@@ -61,7 +61,7 @@ function App() {
       <CssBaseline />
       <Layout>
         <HomePage path="/" />
-        <Error404Page path="404" />
+        <Error404Page default path="404" />
         <CountryPage path="country/:country" />
       </Layout>
     </ThemeProvider>
