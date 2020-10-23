@@ -60,10 +60,6 @@ const useStyles = makeStyles((theme) => ({
 
 const margin = { top: 16, right: 16, bottom: 40, left: 45 };
 
-type CasesType = "Confirmed" | "Recovered" | "Deaths";
-
-const casesType: Array<CasesType> = ["Confirmed", "Recovered", "Deaths"];
-
 export const CountryPage = (props: RouteComponentProps) => {
   const { country } = useParams<{ country: string }>();
 
@@ -117,24 +113,51 @@ export const CountryPage = (props: RouteComponentProps) => {
                     General summary
                   </Typography>
                 </Grid>
-                {casesType.map((caseType: CasesType) => (
-                  <Grid item xs={12} sm key={`summary-${caseType}`}>
-                    <Typography variant="h6" className={classes[caseType]}>
-                      {caseType}
-                    </Typography>
-                    <Typography
-                      variant="h4"
-                      component="p"
-                      className={classes.result}
-                    >
-                      {data ? (
-                        lastUpdate[caseType].toLocaleString()
-                      ) : (
-                        <Skeleton />
-                      )}
-                    </Typography>
-                  </Grid>
-                ))}
+                <Grid item xs={12} sm>
+                  <Typography variant="h6" className={classes.Confirmed}>
+                    Confirmed
+                  </Typography>
+                  <Typography
+                    variant="h4"
+                    component="p"
+                    className={classes.result}
+                  >
+                    {data ? (
+                      lastUpdate.Confirmed.toLocaleString()
+                    ) : (
+                      <Skeleton />
+                    )}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm>
+                  <Typography variant="h6" className={classes.Recovered}>
+                    Recovered
+                  </Typography>
+                  <Typography
+                    variant="h4"
+                    component="p"
+                    className={classes.result}
+                  >
+                    {data ? (
+                      lastUpdate.Recovered.toLocaleString()
+                    ) : (
+                      <Skeleton />
+                    )}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm>
+                  <Typography variant="h6" className={classes.Deaths}>
+                    Deaths
+                  </Typography>
+                  <Typography
+                    variant="h4"
+                    component="p"
+                    className={classes.result}
+                  >
+                    {data ? lastUpdate.Deaths.toLocaleString() : <Skeleton />}
+                  </Typography>
+                </Grid>
+
                 {data ? (
                   <Grid item xs={12}>
                     <Typography color="textSecondary">
@@ -148,38 +171,96 @@ export const CountryPage = (props: RouteComponentProps) => {
           </Box>
           <Box component="section" id="chart-section">
             <Grid container spacing={4}>
-              {casesType.map((caseType: CasesType) => (
-                <Grid item xs={12} key={`chart-${caseType}`}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <Typography variant="h5" component="h3">
-                        {caseType} cases
-                      </Typography>
-                    </Grid>
-                    <Grid xs={12} item>
-                      <AspectRatioBox ratio={isMobile ? 3 / 4 : 9 / 21}>
-                        {!data ? (
-                          <Skeleton variant="rect" height="100%" />
-                        ) : (
-                          <Box height="100%">
-                            <ParentSize>
-                              {({ width, height }) => (
-                                <CasesChart
-                                  width={width}
-                                  height={height}
-                                  data={data}
-                                  dataKey={caseType}
-                                  margin={margin}
-                                />
-                              )}
-                            </ParentSize>
-                          </Box>
-                        )}
-                      </AspectRatioBox>
-                    </Grid>
+              <Grid item xs={12}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Typography variant="h5" component="h3">
+                      Confirmed cases
+                    </Typography>
+                  </Grid>
+                  <Grid xs={12} item>
+                    <AspectRatioBox ratio={isMobile ? 3 / 4 : 9 / 21}>
+                      {!data ? (
+                        <Skeleton variant="rect" height="100%" />
+                      ) : (
+                        <Box height="100%">
+                          <ParentSize>
+                            {({ width, height }) => (
+                              <CasesChart
+                                width={width}
+                                height={height}
+                                data={data}
+                                dataKey={"Confirmed"}
+                                margin={margin}
+                              />
+                            )}
+                          </ParentSize>
+                        </Box>
+                      )}
+                    </AspectRatioBox>
                   </Grid>
                 </Grid>
-              ))}
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Typography variant="h5" component="h3">
+                      Recovered cases
+                    </Typography>
+                  </Grid>
+                  <Grid xs={12} item>
+                    <AspectRatioBox ratio={isMobile ? 3 / 4 : 9 / 21}>
+                      {!data ? (
+                        <Skeleton variant="rect" height="100%" />
+                      ) : (
+                        <Box height="100%">
+                          <ParentSize>
+                            {({ width, height }) => (
+                              <CasesChart
+                                width={width}
+                                height={height}
+                                data={data}
+                                dataKey={"Recovered"}
+                                margin={margin}
+                              />
+                            )}
+                          </ParentSize>
+                        </Box>
+                      )}
+                    </AspectRatioBox>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Typography variant="h5" component="h3">
+                      Deaths cases
+                    </Typography>
+                  </Grid>
+                  <Grid xs={12} item>
+                    <AspectRatioBox ratio={isMobile ? 3 / 4 : 9 / 21}>
+                      {!data ? (
+                        <Skeleton variant="rect" height="100%" />
+                      ) : (
+                        <Box height="100%">
+                          <ParentSize>
+                            {({ width, height }) => (
+                              <CasesChart
+                                width={width}
+                                height={height}
+                                data={data}
+                                dataKey={"Deaths"}
+                                margin={margin}
+                              />
+                            )}
+                          </ParentSize>
+                        </Box>
+                      )}
+                    </AspectRatioBox>
+                  </Grid>
+                </Grid>
+              </Grid>
               <Grid item xs={12}>
                 <Button
                   color="primary"
