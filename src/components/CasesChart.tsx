@@ -19,10 +19,12 @@ import {
 import { bisector, extent, max } from "d3-array";
 import { timeFormat } from "d3-time-format";
 
-import { CountryResponse, DataKeys } from "../types";
+import { CountryResponse } from "../types";
 import { formatTotal } from "../utils";
 
 const formatDate = timeFormat("%b %d, '%y");
+
+type DataKeys = "Confirmed" | "Recovered" | "Deaths";
 
 // accessors
 const getXValue = (d: CountryResponse): Date => new Date(d.Date);

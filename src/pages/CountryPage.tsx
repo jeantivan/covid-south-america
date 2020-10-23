@@ -26,7 +26,7 @@ import { CasesChart } from "../components/CasesChart";
 import { Seo } from "../components/Seo";
 
 import { FLAG_PREFIX } from "../constants";
-import { CountryResponse, DataKeys } from "../types";
+import { CountryResponse } from "../types";
 import { fetcher, getCountryNameBySlug } from "../utils";
 
 const useStyles = makeStyles((theme) => ({
@@ -60,7 +60,9 @@ const useStyles = makeStyles((theme) => ({
 
 const margin = { top: 16, right: 16, bottom: 40, left: 45 };
 
-const casesType: Array<DataKeys> = ["Confirmed", "Recovered", "Deaths"];
+type CasesType = "Confirmed" | "Recovered" | "Deaths";
+
+const casesType: Array<CasesType> = ["Confirmed", "Recovered", "Deaths"];
 
 export const CountryPage = (props: RouteComponentProps) => {
   const { country } = useParams<{ country: string }>();
@@ -115,7 +117,7 @@ export const CountryPage = (props: RouteComponentProps) => {
                     General summary
                   </Typography>
                 </Grid>
-                {casesType.map((caseType: DataKeys) => (
+                {casesType.map((caseType: CasesType) => (
                   <Grid item xs={12} sm key={`summary-${caseType}`}>
                     <Typography variant="h6" className={classes[caseType]}>
                       {caseType}
@@ -146,7 +148,7 @@ export const CountryPage = (props: RouteComponentProps) => {
           </Box>
           <Box component="section" id="chart-section">
             <Grid container spacing={4}>
-              {casesType.map((caseType: DataKeys) => (
+              {casesType.map((caseType: CasesType) => (
                 <Grid item xs={12} key={`chart-${caseType}`}>
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
