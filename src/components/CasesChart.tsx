@@ -1,4 +1,7 @@
+import React, { useCallback, useMemo } from "react";
+
 import { fade, makeStyles, Paper, useTheme } from "@material-ui/core";
+
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { curveMonotoneX } from "@visx/curve";
 import { localPoint } from "@visx/event";
@@ -12,9 +15,10 @@ import {
   useTooltip,
   useTooltipInPortal,
 } from "@visx/tooltip";
+
 import { bisector, extent, max } from "d3-array";
 import { timeFormat } from "d3-time-format";
-import React, { useCallback, useMemo } from "react";
+
 import { CountryResponse } from "../types";
 import { formatTotal } from "../utils";
 

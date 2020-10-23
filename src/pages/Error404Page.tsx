@@ -1,6 +1,8 @@
-import { Box, Button, Typography } from "@material-ui/core";
-import { Link, RouteComponentProps } from "react-router-dom";
 import React from "react";
+import { Link, RouteComponentProps } from "react-router-dom";
+
+import { Box, Button, Typography } from "@material-ui/core";
+
 import { Seo } from "../components/Seo";
 
 export const Error404Page = (props: RouteComponentProps) => {

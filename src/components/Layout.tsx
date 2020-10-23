@@ -1,9 +1,10 @@
-import { Box, Container } from "@material-ui/core";
 import React, { ReactNode } from "react";
+import { Switch } from "react-router-dom";
+
+import { Box, Container } from "@material-ui/core";
+
 import { Footer } from "./Footer";
 import { Navbar } from "./Navbar";
-
-import { Switch } from "react-router-dom";
 
 interface LayoutProps {
   children: ReactNode;

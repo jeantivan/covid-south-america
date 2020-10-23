@@ -1,3 +1,5 @@
+import React from "react";
+import { Route } from "react-router-dom";
 import {
   createMuiTheme,
   CssBaseline,
@@ -5,14 +7,14 @@ import {
   responsiveFontSizes,
   ThemeProvider,
 } from "@material-ui/core";
-import React from "react";
-import { useColorMode } from "./components/ColorMode";
-import { Layout } from "./components/Layout";
+import orange from "@material-ui/core/colors/orange";
+
 import { CountryPage } from "./pages/CountryPage";
 import { HomePage } from "./pages/HomePage";
-import orange from "@material-ui/core/colors/orange";
 import { Error404Page } from "./pages/Error404Page";
-import { Route } from "react-router-dom";
+
+import { Layout } from "./components/Layout";
+import { useColorMode } from "./components/ColorMode";
 
 const useStyles = makeStyles({
   "@global": {

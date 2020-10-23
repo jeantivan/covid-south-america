@@ -1,3 +1,6 @@
+import React from "react";
+import { Link as RRLink } from "react-router-dom";
+
 import {
   AppBar,
   Box,
@@ -12,8 +15,7 @@ import {
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import GithubIcon from "@material-ui/icons/GitHub";
-import { Link as RRLink } from "react-router-dom";
-import React from "react";
+
 import { useColorMode } from "./ColorMode";
 
 const useStyles = makeStyles((theme) => ({

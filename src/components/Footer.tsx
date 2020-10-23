@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Container,
   Grid,
@@ -5,13 +7,14 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+
 const useStyles = makeStyles((theme) => ({
   footer: {
     background: theme.palette.background.paper,
     padding: theme.spacing(3, 0),
   },
 }));
+
 export const Footer: React.FC = () => {
   const classes = useStyles();
   return (

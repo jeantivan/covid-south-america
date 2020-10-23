@@ -1,6 +1,7 @@
-import { useTheme } from "@material-ui/core";
 import React from "react";
 import { Helmet } from "react-helmet";
+
+import { useTheme } from "@material-ui/core";
 
 interface SeoProps {
   title?: string;

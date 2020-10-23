@@ -1,3 +1,12 @@
+import React from "react";
+import useSWR from "swr";
+import {
+  Link,
+  Redirect,
+  RouteComponentProps,
+  useParams,
+} from "react-router-dom";
+
 import {
   Box,
   Button,
@@ -9,18 +18,13 @@ import {
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import { ParentSize } from "@visx/responsive";
+
 import { timeFormat } from "d3-time-format";
-import React from "react";
-import {
-  Link,
-  Redirect,
-  RouteComponentProps,
-  useParams,
-} from "react-router-dom";
-import useSWR from "swr";
+
 import { AspectRatioBox } from "../components/AspectRatioBox";
 import { CasesChart } from "../components/CasesChart";
 import { Seo } from "../components/Seo";
+
 import { FLAG_PREFIX } from "../constants";
 import { CountryResponse } from "../types";
 import { fetcher, getCountryNameBySlug } from "../utils";

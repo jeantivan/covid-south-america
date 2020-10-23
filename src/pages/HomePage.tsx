@@ -1,3 +1,6 @@
+import React, { useState } from "react";
+import useSWR from "swr";
+import { RouteComponentProps } from "react-router-dom";
 import {
   Box,
   Grid,
@@ -8,18 +11,17 @@ import {
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
 import MapIcon from "@material-ui/icons/Map";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
-import { Skeleton } from "@material-ui/lab";
-import { RouteComponentProps } from "react-router-dom";
 import { ParentSize } from "@visx/responsive";
 import { timeFormat } from "d3-time-format";
-import React, { useState } from "react";
-import useSWR from "swr";
+
 import { AspectRatioBox } from "../components/AspectRatioBox";
 import { CountryItem } from "../components/CountryItem";
 import { Seo } from "../components/Seo";
 import { SouthAmericaMap } from "../components/SouthAmericaMap";
+
 import { GlobalSummaryResponse } from "../types";
 import { computeLASummary, fetcher } from "../utils";
 

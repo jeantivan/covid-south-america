@@ -1,12 +1,16 @@
+import React, { useCallback } from "react";
+import { useHistory } from "react-router-dom";
+
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
+
 import { Graticule, Mercator } from "@visx/geo";
 import { Group } from "@visx/group";
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
-import React, { useCallback } from "react";
-import { useHistory } from "react-router-dom";
+
 import * as topojson from "topojson-client";
-import { FLAG_PREFIX } from "../constants";
 import topology from "../topojson/south-america.json";
+
+import { FLAG_PREFIX } from "../constants";
 import { SummaryCountryResponse } from "../types";
 
 const useStyles = makeStyles((theme) => ({

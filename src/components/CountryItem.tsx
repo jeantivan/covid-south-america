@@ -1,7 +1,7 @@
-import { Grid, Paper, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 import React from "react";
+import { Link } from "react-router-dom";
+import { Grid, Paper, Typography, makeStyles } from "@material-ui/core";
+
 import { FLAG_PREFIX } from "../constants";
 import { SummaryCountryResponse } from "../types";
 

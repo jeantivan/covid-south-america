@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Box, BoxProps, makeStyles } from "@material-ui/core/";
+import { Box, BoxProps, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
