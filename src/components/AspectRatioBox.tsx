@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { Box, BoxProps, makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
     position: "relative",
     width: "100%",
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     right: 0,
   },
-}));
+});
 
 interface AspectRatioBoxProps extends BoxProps {
   children: ReactNode;
