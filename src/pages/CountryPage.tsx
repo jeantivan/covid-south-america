@@ -1,11 +1,6 @@
 import React from "react";
 import useSWR from "swr";
-import {
-  Link,
-  Redirect,
-  RouteComponentProps,
-  useParams,
-} from "react-router-dom";
+import { Link, Redirect, useParams } from "react-router-dom";
 
 import {
   Box,
@@ -60,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 const margin = { top: 16, right: 16, bottom: 40, left: 45 };
 
-export const CountryPage = (props: RouteComponentProps) => {
+export const CountryPage = () => {
   const { country } = useParams<{ country: string }>();
 
   const countryName = getCountryNameBySlug(country);

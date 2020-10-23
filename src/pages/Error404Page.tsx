@@ -1,11 +1,11 @@
 import React from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { Box, Button, Typography } from "@material-ui/core";
 
 import { Seo } from "../components/Seo";
 
-export const Error404Page = (props: RouteComponentProps) => {
+export const Error404Page = () => {
   return (
     <Box
       width="100%"
