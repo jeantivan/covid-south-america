@@ -4,11 +4,15 @@ import App from "./App";
 import { ColorModeProvider } from "./components/ColorMode";
 import * as serviceWorker from "./serviceWorker";
 
+import { BrowserRouter as Router } from "react-router-dom";
+
 ReactDOM.render(
   <React.StrictMode>
-    <ColorModeProvider>
-      <App />
-    </ColorModeProvider>
+    <Router>
+      <ColorModeProvider>
+        <App />
+      </ColorModeProvider>
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

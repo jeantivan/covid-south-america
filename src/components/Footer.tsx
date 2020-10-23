@@ -24,6 +24,7 @@ export const Footer: React.FC = () => {
               <Link
                 href="https://covid19api.com/"
                 target="_blank"
+                rel="noopener noreferrer"
                 title="COVID19 API"
               >
                 COVID19 API

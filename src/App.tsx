@@ -12,6 +12,7 @@ import { CountryPage } from "./pages/CountryPage";
 import { HomePage } from "./pages/HomePage";
 import orange from "@material-ui/core/colors/orange";
 import { Error404Page } from "./pages/Error404Page";
+import { Route } from "react-router-dom";
 
 const useStyles = makeStyles({
   "@global": {
@@ -60,9 +61,9 @@ function App() {
     >
       <CssBaseline />
       <Layout>
-        <HomePage path="/" />
-        <Error404Page default path="404" />
-        <CountryPage path="country/:country" />
+        <Route path="/404" component={Error404Page} />
+        <Route path="/country/:country" component={CountryPage} />
+        <Route path="/" component={HomePage} />
       </Layout>
     </ThemeProvider>
   );
