@@ -24,17 +24,14 @@ import { formatTotal } from "../utils";
 
 const formatDate = timeFormat("%b %d, '%y");
 
-type DataKeys = "Confirmed" | "Recovered" | "Deaths";
-
-// accessors
+// Accessors
 const getXValue = (d: CountryResponse): Date => new Date(d.Date);
 const getDataKeyValue = (dataKey: DataKeys) => (d: CountryResponse) =>
   d[dataKey];
 const bisectDate = bisector<CountryResponse, Date>((p) => new Date(p.Date))
   .left;
 
-type TooltipData = CountryResponse;
-
+// Styles
 const useStyles = makeStyles((theme) => ({
   tick: {
     fill: theme.palette.getContrastText(theme.palette.background.paper),
@@ -80,6 +77,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+type DataKeys = "Confirmed" | "Recovered" | "Deaths";
+type TooltipData = CountryResponse;
 type CasesChartProps = {
   width: number;
   height: number;
@@ -88,13 +87,13 @@ type CasesChartProps = {
   margin: { top: number; right: number; bottom: number; left: number };
 };
 
-export const CasesChart: React.FC<CasesChartProps> = ({
+export const CasesChart = ({
   width,
   height,
   data,
   dataKey,
   margin,
-}) => {
+}: CasesChartProps) => {
   const getYValue = getDataKeyValue(dataKey);
   const classes = useStyles();
   const theme = useTheme();
