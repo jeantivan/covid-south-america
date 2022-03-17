@@ -7,14 +7,18 @@ import {
 
 export const formatDate = (
   date: string,
-  options = {
+  /* options = {
     day: "numeric",
     month: "numeric",
     year: "numeric",
-  }
+  } */
 ) => {
   let d = new Date(date);
-  return d.toLocaleDateString("ve-ES", options);
+  return d.toLocaleDateString("ve-ES", {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+  });
 };
 
 export const formatTotal = (total: number): string => {

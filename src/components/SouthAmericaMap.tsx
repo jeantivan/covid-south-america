@@ -1,7 +1,9 @@
 import React, { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 
-import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@mui/material";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import { Graticule, Mercator } from "@visx/geo";
 import { Group } from "@visx/group";
@@ -139,6 +141,7 @@ export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
         data={southAmerica.features}
         scale={scale}
         translate={[centerX, centerY]}
+        // @ts-ignore
         fitSize={[[width, height - 40], southAmerica]}
       >
         {(mercator) => (

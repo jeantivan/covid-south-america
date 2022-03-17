@@ -1,12 +1,8 @@
 import React from "react";
 
-import {
-  Container,
-  Grid,
-  Link,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { Container, Grid, Link, Typography } from "@mui/material";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   footer: {

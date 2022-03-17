@@ -1,20 +1,30 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import {
-  createMuiTheme,
+  createTheme,
   CssBaseline,
-  makeStyles,
   responsiveFontSizes,
   ThemeProvider,
-} from "@material-ui/core";
-import orange from "@material-ui/core/colors/orange";
-
+  Theme,
+  StyledEngineProvider,
+  adaptV4Theme,
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { CountryPage } from "./pages/CountryPage";
+
 import { HomePage } from "./pages/HomePage";
 import { Error404Page } from "./pages/Error404Page";
-
 import { Layout } from "./components/Layout";
+
 import { useColorMode } from "./components/ColorMode";
+import { orange } from '@mui/material/colors';
+
+
+declare module '@mui/styles/defaultTheme' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
 
 const useStyles = makeStyles({
   "@global": {
@@ -51,23 +61,25 @@ function App() {
   const { colorMode } = useColorMode();
 
   return (
-    <ThemeProvider
-      theme={responsiveFontSizes(
-        createMuiTheme({
-          palette: {
-            type: colorMode === "light" ? "light" : "dark",
-            primary: orange,
-          },
-        })
-      )}
-    >
-      <CssBaseline />
-      <Layout>
-        <Route path="/404" component={Error404Page} />
-        <Route path="/country/:country" component={CountryPage} />
-        <Route path="/" component={HomePage} />
-      </Layout>
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider
+        theme={responsiveFontSizes(
+          createTheme(adaptV4Theme({
+            palette: {
+              mode: colorMode === "light" ? "light" : "dark",
+              primary: orange,
+            },
+          }))
+        )}
+      >
+        <CssBaseline />
+        <Layout>
+          <Route path="/404" component={Error404Page} />
+          <Route path="/country/:country" component={CountryPage} />
+          <Route path="/" component={HomePage} />
+        </Layout>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }
 

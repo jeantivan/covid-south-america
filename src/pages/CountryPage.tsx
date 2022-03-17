@@ -2,16 +2,9 @@ import React from "react";
 import useSWR from "swr";
 import { Link, Redirect, useParams } from "react-router-dom";
 
-import {
-  Box,
-  Button,
-  Grid,
-  makeStyles,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
+import { Box, Button, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { Skeleton } from '@mui/material';
 import { ParentSize } from "@visx/responsive";
 
 import { timeFormat } from "d3-time-format";
@@ -61,7 +54,7 @@ export const CountryPage = () => {
   const countryName = getCountryNameBySlug(country);
   const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { data, error } = useSWR<CountryResponse[]>(
     `https://api.covid19api.com/dayone/country/${country}`,
@@ -176,7 +169,7 @@ export const CountryPage = () => {
                   <Grid xs={12} item>
                     <AspectRatioBox ratio={isMobile ? 3 / 4 : 9 / 21}>
                       {!data ? (
-                        <Skeleton variant="rect" height="100%" />
+                        <Skeleton variant="rectangular" height="100%" />
                       ) : (
                         <Box height="100%">
                           <ParentSize>
@@ -206,7 +199,7 @@ export const CountryPage = () => {
                   <Grid xs={12} item>
                     <AspectRatioBox ratio={isMobile ? 3 / 4 : 9 / 21}>
                       {!data ? (
-                        <Skeleton variant="rect" height="100%" />
+                        <Skeleton variant="rectangular" height="100%" />
                       ) : (
                         <Box height="100%">
                           <ParentSize>
@@ -236,7 +229,7 @@ export const CountryPage = () => {
                   <Grid xs={12} item>
                     <AspectRatioBox ratio={isMobile ? 3 / 4 : 9 / 21}>
                       {!data ? (
-                        <Skeleton variant="rect" height="100%" />
+                        <Skeleton variant="rectangular" height="100%" />
                       ) : (
                         <Box height="100%">
                           <ParentSize>
@@ -270,7 +263,7 @@ export const CountryPage = () => {
           </Box>
         </>
       ) : (
-        <Grid container justify="center" alignItems="center">
+        <Grid container justifyContent="center" alignItems="center">
           <Typography variant="h3" align="center">
             Something wen't wrong
           </Typography>

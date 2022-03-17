@@ -1,19 +1,11 @@
 import React, { useState } from "react";
 import useSWR from "swr";
 
-import {
-  Box,
-  Grid,
-  IconButton,
-  makeStyles,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
-import MapIcon from "@material-ui/icons/Map";
-import ViewModuleIcon from "@material-ui/icons/ViewModule";
+import { Box, Grid, IconButton, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { Skeleton } from '@mui/material';
+import MapIcon from "@mui/icons-material/Map";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import { ParentSize } from "@visx/responsive";
 import { timeFormat } from "d3-time-format";
 
@@ -43,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 export const HomePage = () => {
   const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [viewMap, setViewMap] = useState(true);
   const { data: globalData } = useSWR<GlobalSummaryResponse>(
@@ -52,13 +44,15 @@ export const HomePage = () => {
   );
   const laSummary = computeLASummary(globalData);
 
+  console.log({laSummary})
+
   return (
     <Box component="section">
       <Seo title="Home" />
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography variant="h3" component="h2">
-            Cases in South America
+            Number of cases in South America
           </Typography>
         </Grid>
         <Grid item xs={12} lg={3}>
@@ -144,7 +138,7 @@ export const HomePage = () => {
                   onClick={() => {
                     setViewMap((state) => !state);
                   }}
-                >
+                  size="large">
                   {viewMap ? <ViewModuleIcon /> : <MapIcon />}
                 </IconButton>
               </Tooltip>
@@ -155,7 +149,7 @@ export const HomePage = () => {
               <AspectRatioBox ratio={isMobile ? 1 : 0.65}>
                 <Box height="100%">
                   {!laSummary ? (
-                    <Skeleton variant="rect" width="100%" height="100%" />
+                    <Skeleton variant="rectangular" width="100%" height="100%" />
                   ) : (
                     <ParentSize>
                       {({ width, height }) => (
@@ -181,7 +175,7 @@ export const HomePage = () => {
                   <>
                     {Array.from({ length: 6 }, (_, i) => (
                       <Grid item xs={12} md={4} key={`skeleton-${i}`}>
-                        <Skeleton variant="rect" height="80px" />
+                        <Skeleton variant="rectangular" height="80px" />
                       </Grid>
                     ))}
                   </>

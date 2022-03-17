@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { Switch } from "react-router-dom";
 
-import { Box, Container } from "@material-ui/core";
+import { Box, Container } from "@mui/material";
 
 import { Footer } from "./Footer";
 import { Navbar } from "./Navbar";

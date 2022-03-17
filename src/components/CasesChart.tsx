@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo } from "react";
 
-import { fade, makeStyles, Paper, useTheme } from "@material-ui/core";
+import { alpha, Paper, useTheme } from "@mui/material";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { curveMonotoneX } from "@visx/curve";
@@ -41,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
   rect: {
     fill:
-      theme.palette.type === "light"
+      theme.palette.mode === "light"
         ? theme.palette.grey[100]
         : theme.palette.background.paper,
   },
@@ -234,7 +236,7 @@ export const CasesChart = ({
               <Line
                 from={{ x: tooltipLeft, y: 0 }}
                 to={{ x: tooltipLeft, y: yMax }}
-                stroke={fade(theme.palette[colorDataKey].light, 0.5)}
+                stroke={alpha(theme.palette[colorDataKey].light, 0.5)}
                 strokeWidth={2}
                 pointerEvents="none"
                 strokeDasharray="5,2"

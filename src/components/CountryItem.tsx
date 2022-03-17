@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Grid, Paper, Typography, makeStyles } from "@material-ui/core";
+import { Grid, Paper, Typography } from "@mui/material";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 import { FLAG_PREFIX } from "../constants";
 import { SummaryCountryResponse } from "../types";
