@@ -33,7 +33,7 @@ export const Footer: React.FC = () => {
           <Grid item xs={12}>
             <Typography align="center" variant="body2">
               Created by{" "}
-              <Link href="https://github.com/jptivan53" title="Jean Tivan">
+              <Link href="https://github.com/jeantivan" title="Jean Tivan">
                 Jean Tivan
               </Link>
             </Typography>

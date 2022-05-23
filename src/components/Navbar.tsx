@@ -1,8 +1,17 @@
 import React from "react";
 import { Link as RRLink } from "react-router-dom";
 
-import { AppBar, Box, Hidden, IconButton, Link, Toolbar, Tooltip, Typography } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import {
+  AppBar,
+  Box,
+  Hidden,
+  IconButton,
+  Link,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import GithubIcon from "@mui/icons-material/GitHub";
@@ -46,7 +55,8 @@ export const Navbar: React.FC = () => {
                 toogleColorMode();
               }}
               aria-label="Toogle color mode"
-              size="large">
+              size="large"
+            >
               {colorMode === "light" ? (
                 <Brightness4Icon />
               ) : (
@@ -59,9 +69,10 @@ export const Navbar: React.FC = () => {
           <Box ml={1}>
             <IconButton
               component="a"
-              href="https://github.com/jptivan53/"
+              href="https://github.com/jeantivan/"
               aria-label="Github profile"
-              size="large">
+              size="large"
+            >
               <GithubIcon />
             </IconButton>
           </Box>
