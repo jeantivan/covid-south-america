@@ -1,8 +1,6 @@
 import React, { useCallback, useMemo } from "react";
-
 import { alpha, Paper, useTheme } from "@mui/material";
-
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from "@mui/material/styles";
 
 import { AxisBottom, AxisLeft } from "@visx/axis";
 import { curveMonotoneX } from "@visx/curve";
@@ -30,52 +28,53 @@ const formatDate = timeFormat("%b %d, '%y");
 const getXValue = (d: CountryResponse): Date => new Date(d.Date);
 const getDataKeyValue = (dataKey: DataKeys) => (d: CountryResponse) =>
   d[dataKey];
-const bisectDate = bisector<CountryResponse, Date>((p) => new Date(p.Date))
-  .left;
+const bisectDate = bisector<CountryResponse, Date>(
+  (p) => new Date(p.Date)
+).left;
 
-// Styles
-const useStyles = makeStyles((theme) => ({
-  tick: {
-    fill: theme.palette.getContrastText(theme.palette.background.paper),
-    "& text": {
-      fill: theme.palette.getContrastText(theme.palette.background.paper),
+const Root = styled(Paper)(({ theme }) => ({
+  "& .chart-grid": {
+    background: theme.palette.grey[500],
+    strokeDasharray: "3,3",
+    stroke: theme.palette.text.primary,
+    pointerEvents: "none",
+    "& > *": {
+      stroke: theme.palette.text.primary,
+      strokeOpacity: 0.3,
     },
   },
-  rect: {
+  "& .chart-rect": {
     fill:
       theme.palette.mode === "light"
         ? theme.palette.grey[100]
         : theme.palette.background.paper,
   },
-  tooltip: {
+  "& .chart-tooltip": {
     zIndex: 2,
     borderRadius: "50%",
     background: "#35477d",
     position: "absolute",
   },
-  grid: {
-    strokeDasharray: "3,3",
-    stroke: theme.palette.getContrastText(theme.palette.background.paper),
-    pointerEvents: "none",
-    "& > *": {
-      stroke: theme.palette.getContrastText(theme.palette.background.paper),
-      strokeOpacity: 0.3,
-    },
-  },
-  Confirmed: {
+  "& .chart-Confirmed": {
     stroke: theme.palette.info.main,
     fill: theme.palette.info.light,
     fillOpacity: 0.3,
   },
-  Recovered: {
+  "& .chart-Recovered": {
     stroke: theme.palette.success.main,
     fill: theme.palette.success.light,
     fillOpacity: 0.3,
   },
-  Deaths: {
+  "& .chart-Deaths": {
     stroke: theme.palette.error.main,
     fill: theme.palette.error.light,
     fillOpacity: 0.3,
+  },
+  "& .chart-tick": {
+    fill: theme.palette.text.primary,
+    "& text": {
+      fill: theme.palette.text.primary,
+    },
   },
 }));
 
@@ -86,18 +85,18 @@ type CasesChartProps = {
   height: number;
   data: CountryResponse[];
   dataKey: DataKeys;
-  margin: { top: number; right: number; bottom: number; left: number };
 };
+
+const margin = { top: 40, right: 16, bottom: 40, left: 45 };
 
 export const CasesChart = ({
   width,
   height,
   data,
   dataKey,
-  margin,
 }: CasesChartProps) => {
   const getYValue = getDataKeyValue(dataKey);
-  const classes = useStyles();
+  //const classes = useStyles();
   const theme = useTheme();
 
   const contrastText = theme.palette.getContrastText(
@@ -182,39 +181,40 @@ export const CasesChart = ({
   );
 
   return width < 10 ? null : (
-    <Paper>
+    <Root>
       <svg ref={containerRef} width={width} height={height}>
         <Group left={margin.left} top={margin.top}>
           <Grid
+            className="chart-grid"
             xScale={xScale}
             yScale={yScale}
             width={xMax}
             height={yMax}
             numTicksRows={width < 600 ? 4 : 5}
             numTicksColumns={width < 600 ? 4 : undefined}
-            className={classes.grid}
           />
           <AreaClosed<CountryResponse>
             data={data}
-            x={(d) => xScale(getXValue(d)) as number}
-            y={(d) => yScale(getYValue(d)) as number}
+            x={(d: CountryResponse) => xScale(getXValue(d)) as number}
+            y={(d: CountryResponse) => yScale(getYValue(d)) as number}
             yScale={yScale}
             strokeWidth={2}
-            className={classes[dataKey]}
             curve={curveMonotoneX}
+            fillOpacity={0.3}
+            className={`chart-${dataKey}`}
           />
           <AxisLeft
             scale={yScale}
-            tickClassName={classes.tick}
+            tickClassName="chart-tick"
             stroke={contrastText}
             tickStroke={contrastText}
             numTicks={width < 600 ? 4 : 5}
-            tickFormat={(v) => `${formatTotal(Number(v))}`}
+            tickFormat={(v: any) => `${formatTotal(Number(v))}`}
           />
           <AxisBottom
             top={yMax}
             scale={xScale}
-            tickClassName={classes.tick}
+            tickClassName="chart-tick"
             stroke={contrastText}
             tickStroke={contrastText}
             numTicks={width < 600 ? 4 : undefined}
@@ -285,6 +285,6 @@ export const CasesChart = ({
           </TooltipWithBounds>
         </div>
       )}
-    </Paper>
+    </Root>
   );
 };
