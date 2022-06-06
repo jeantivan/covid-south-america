@@ -48,3 +48,5 @@ export type LASummary = {
   Countries: SummaryCountryResponse[];
   Date: string;
 };
+
+export type ColorModeOptions = "light" | "dark";
