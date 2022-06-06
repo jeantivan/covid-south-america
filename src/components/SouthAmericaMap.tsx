@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { Box, Grid, Typography } from "@mui/material";
-
-import makeStyles from '@mui/styles/makeStyles';
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 
 import { Graticule, Mercator } from "@visx/geo";
 import { Group } from "@visx/group";
@@ -15,52 +15,17 @@ import topology from "../topojson/south-america.json";
 import { FLAG_PREFIX } from "../constants";
 import { SummaryCountryResponse } from "../types";
 
-const useStyles = makeStyles((theme) => ({
-  tooltip: {
-    color: theme.palette.getContrastText(theme.palette.background.paper),
-    background: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2),
-    maxWidth: 200,
-  },
-  countryPath: {
-    strokeWidth: 1,
-    stroke: theme.palette.background.paper,
-    strokeOpacity: 0.3,
-    fill: theme.palette.grey[400],
-    cursor: "pointer",
+const sxCountryPath = (theme: any) => ({
+  strokeWidth: 1,
+  stroke: theme.palette.background.paper,
+  strokeOpacity: 0.3,
+  fill: theme.palette.grey[400],
+  cursor: "pointer",
 
-    "&:hover": {
-      fill: theme.palette.primary.main,
-    },
+  "&:hover": {
+    fill: theme.palette.primary.main,
   },
-  guiana: {
-    fill: theme.palette.grey[600],
-    cursor: "not-allowed",
-    "&:hover": {
-      fill: theme.palette.grey[600],
-    },
-  },
-  bold: {
-    fontWeight: 700,
-  },
-  confirmed: {
-    color: theme.palette.info.main,
-  },
-  recovered: {
-    color: theme.palette.success.main,
-  },
-  deaths: {
-    color: theme.palette.error.main,
-  },
-  rect: {
-    fill: theme.palette.background.paper,
-  },
-  graticule: {
-    stroke: theme.palette.getContrastText(theme.palette.background.default),
-    strokeOpacity: 0.3,
-  },
-}));
+});
 
 type Properties = { type: string; Country: string; Slug: string };
 
@@ -84,17 +49,16 @@ interface SouthAmericaMapProps {
   dataCountries: SummaryCountryResponse[];
 }
 
-export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
+export const SouthAmericaMap = ({
   width,
   height,
   dataCountries,
-}) => {
+}: SouthAmericaMapProps) => {
   const centerX = width / 2;
   const centerY = height / 2;
   const scale = (width / 550) * 100;
 
-  const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { containerRef, TooltipInPortal } = useTooltipInPortal({
     // when tooltip containers are scrolled, this will correctly update the Tooltip position
@@ -129,13 +93,16 @@ export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
 
   return width < 10 ? null : (
     <svg width={width} height={height} ref={containerRef}>
-      <rect
+      <Box
+        component="rect"
         x={0}
         y={0}
         width={width}
         height={height}
         rx={14}
-        className={classes.rect}
+        sx={(theme: any) => ({
+          fill: theme.palette.background.paper,
+        })}
       />
       <Mercator<FeatureShape>
         data={southAmerica.features}
@@ -144,26 +111,26 @@ export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
         // @ts-ignore
         fitSize={[[width, height - 40], southAmerica]}
       >
-        {(mercator) => (
+        {(mercator: any) => (
           <g width={width} height={height}>
-            <Graticule
-              graticule={(g) => mercator.path(g) || ""}
-              className={classes.graticule}
+            <Box
+              component={Graticule}
+              graticule={(g: any) => mercator.path(g) || ""}
               strokeDasharray="3,3"
+              sx={(theme: any) => ({
+                stroke: theme.palette.getContrastText(
+                  theme.palette.background.default
+                ),
+                strokeOpacity: 0.3,
+              })}
             />
             <Group top={20}>
-              {mercator.features.map(({ feature, path }) =>
-                feature.properties.Slug === "french-guiana" ? (
-                  <path
+              {mercator.features.map(
+                ({ feature, path }: { feature: FeatureShape; path: any }) => (
+                  <Box
+                    component="path"
                     key={feature.properties.Country}
                     d={path || ""}
-                    className={`${classes.countryPath} ${classes.guiana}`}
-                  />
-                ) : (
-                  <path
-                    key={feature.properties.Country}
-                    d={path || ""}
-                    className={classes.countryPath}
                     onMouseEnter={() => {
                       handleHover(feature);
                     }}
@@ -171,8 +138,21 @@ export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
                       hideTooltip();
                     }}
                     onClick={() => {
-                      history.push(`/country/${feature.properties.Slug}`);
+                      navigate(`/country/${feature.properties.Slug}`);
                     }}
+                    sx={[
+                      sxCountryPath,
+                      (theme: any) =>
+                        feature.properties.Slug === "french-guiana"
+                          ? {
+                              fill: theme.palette.grey[600],
+                              cursor: "not-allowed",
+                              "&:hover": {
+                                fill: theme.palette.grey[600],
+                              },
+                            }
+                          : {},
+                    ]}
                   />
                 )
               )}
@@ -182,11 +162,20 @@ export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
       </Mercator>
       {tooltipData && (
         <div>
-          <TooltipInPortal
+          <Box
+            component={TooltipInPortal}
             key={Math.random()}
             top={tooltipTop}
             left={tooltipLeft}
-            className={classes.tooltip}
+            sx={(theme: any) => ({
+              color: theme.palette.getContrastText(
+                theme.palette.background.paper
+              ),
+              background: theme.palette.background.paper,
+              boxShadow: theme.shadows[5],
+              padding: theme.spacing(2),
+              maxWidth: 200,
+            })}
           >
             <Grid container spacing={1}>
               <Grid item xs="auto">
@@ -205,34 +194,34 @@ export const SouthAmericaMap: React.FC<SouthAmericaMapProps> = ({
             </Grid>
             <Box>
               <Typography variant="body2">
-                <Typography
-                  component="span"
-                  className={`${classes.bold} ${classes.confirmed}`}
-                >
+                <Typography component="span" fontWeight={700} color="info.main">
                   Confirmed:
                 </Typography>{" "}
                 {tooltipData.TotalConfirmed.toLocaleString()}
               </Typography>
+
               <Typography variant="body2">
                 <Typography
                   component="span"
-                  className={`${classes.bold} ${classes.recovered}`}
-                >
-                  Recovered:
-                </Typography>{" "}
-                {tooltipData.TotalRecovered.toLocaleString()}
-              </Typography>
-              <Typography variant="body2">
-                <Typography
-                  component="span"
-                  className={`${classes.bold} ${classes.deaths}`}
+                  fontWeight={700}
+                  color="error.main"
                 >
                   Deaths:
                 </Typography>{" "}
                 {tooltipData.TotalDeaths.toLocaleString()}
               </Typography>
+              <Typography variant="body2">
+                <Typography
+                  component="span"
+                  fontWeight={700}
+                  color="success.main"
+                >
+                  Recovered:
+                </Typography>{" "}
+                {tooltipData.TotalRecovered.toLocaleString()}
+              </Typography>
             </Box>
-          </TooltipInPortal>
+          </Box>
         </div>
       )}
     </svg>
