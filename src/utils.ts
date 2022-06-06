@@ -3,10 +3,11 @@ import {
   GlobalSummaryResponse,
   LASummary,
   SummaryCountryResponse,
+  ColorModeOptions,
 } from "./types";
 
 export const formatDate = (
-  date: string,
+  date: string
   /* options = {
     day: "numeric",
     month: "numeric",
@@ -123,4 +124,22 @@ export const getCountryNameBySlug = (slug: string | undefined) => {
   }
 
   return country.Country;
+};
+
+export const COLOR_MODE_KEY = "color-mode";
+
+export const getInitialColorMode = (): ColorModeOptions => {
+  // Si el usuario ya había elegido color para el tema se usa el mismo
+  const hasColorMode = JSON.parse(localStorage.getItem(COLOR_MODE_KEY) || "");
+  if (hasColorMode === "light" || hasColorMode === "dark") return hasColorMode;
+
+  // Si no han elegido algún modo, se chequea por color del sistema del usuario.
+  const mql = window.matchMedia("(prefers-color-scheme: dark)");
+  const hasMediaQueryPreference = typeof mql.matches === "boolean";
+  if (hasMediaQueryPreference) {
+    return mql.matches ? "dark" : "light";
+  }
+
+  // Elige el modo claro por defecto
+  return "light";
 };
