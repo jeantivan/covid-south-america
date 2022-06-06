@@ -88,7 +88,7 @@ export const CountryPage = () => {
                     General summary
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm>
+                <Grid item xs={12} sm={3}>
                   <Typography variant="h6" color="info.main">
                     Confirmed
                   </Typography>
@@ -100,7 +100,7 @@ export const CountryPage = () => {
                     )}
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm>
+                <Grid item xs={12} sm="auto">
                   <Typography variant="h6" color="error.main">
                     Deaths
                   </Typography>
@@ -108,7 +108,7 @@ export const CountryPage = () => {
                     {data ? lastUpdate.Deaths.toLocaleString() : <Skeleton />}
                   </Typography>
                 </Grid>
-                <Grid item xs={12} sm>
+                {/* <Grid item xs={12} sm>
                   <Typography variant="h6" color="success.main">
                     Recovered
                   </Typography>
@@ -119,7 +119,7 @@ export const CountryPage = () => {
                       <Skeleton />
                     )}
                   </Typography>
-                </Grid>
+                </Grid> */}
 
                 {data ? (
                   <Grid item xs={12}>
@@ -167,35 +167,6 @@ export const CountryPage = () => {
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Typography variant="h5" component="h3">
-                      Recovered cases
-                    </Typography>
-                  </Grid>
-                  <Grid xs={12} item>
-                    <AspectRatioBox ratio={isMobile ? 3 / 4 : 9 / 21}>
-                      {!data ? (
-                        <Skeleton variant="rectangular" height="100%" />
-                      ) : (
-                        <Box height="100%">
-                          <ParentSize>
-                            {({ width, height }) => (
-                              <CasesChart
-                                width={width}
-                                height={height}
-                                data={data}
-                                dataKey={"Recovered"}
-                              />
-                            )}
-                          </ParentSize>
-                        </Box>
-                      )}
-                    </AspectRatioBox>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={12}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <Typography variant="h5" component="h3">
                       Deaths cases
                     </Typography>
                   </Grid>
@@ -212,6 +183,35 @@ export const CountryPage = () => {
                                 height={height}
                                 data={data}
                                 dataKey={"Deaths"}
+                              />
+                            )}
+                          </ParentSize>
+                        </Box>
+                      )}
+                    </AspectRatioBox>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Typography variant="h5" component="h3">
+                      Recovered cases
+                    </Typography>
+                  </Grid>
+                  <Grid xs={12} item>
+                    <AspectRatioBox ratio={isMobile ? 3 / 4 : 9 / 21}>
+                      {!data ? (
+                        <Skeleton variant="rectangular" height="100%" />
+                      ) : (
+                        <Box height="100%">
+                          <ParentSize>
+                            {({ width, height }) => (
+                              <CasesChart
+                                width={width}
+                                height={height}
+                                data={data}
+                                dataKey={"Recovered"}
                               />
                             )}
                           </ParentSize>

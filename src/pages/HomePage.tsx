@@ -89,7 +89,7 @@ export const HomePage = () => {
                 )}
               </Typography>
             </Grid>
-            <Grid item xs={12} sm lg={12}>
+            {/*  <Grid item xs={12} sm lg={12}>
               <Typography
                 variant="h5"
                 component="h4"
@@ -106,7 +106,7 @@ export const HomePage = () => {
                   <Skeleton />
                 )}
               </Typography>
-            </Grid>
+            </Grid> */}
 
             {!laSummary ? null : (
               <Grid item xs={12}>

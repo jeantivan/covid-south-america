@@ -210,7 +210,7 @@ export const SouthAmericaMap = ({
                 </Typography>{" "}
                 {tooltipData.TotalDeaths.toLocaleString()}
               </Typography>
-              <Typography variant="body2">
+              {/* <Typography variant="body2">
                 <Typography
                   component="span"
                   fontWeight={700}
@@ -219,7 +219,7 @@ export const SouthAmericaMap = ({
                   Recovered:
                 </Typography>{" "}
                 {tooltipData.TotalRecovered.toLocaleString()}
-              </Typography>
+              </Typography> */}
             </Box>
           </Box>
         </div>

@@ -12,7 +12,7 @@ export const CountryItem = ({
   Country,
   Slug,
   TotalConfirmed,
-  TotalRecovered,
+  //TotalRecovered,
   TotalDeaths,
 }: SummaryCountryResponse) => {
   return (
@@ -68,14 +68,6 @@ export const CountryItem = ({
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography variant="body2" color="success.main">
-              Recovered
-            </Typography>
-            <Typography fontWeight={700}>
-              {TotalRecovered.toLocaleString()}
-            </Typography>
-          </Grid>
-          <Grid item xs={4}>
             <Typography variant="body2" color="error.main">
               Deaths
             </Typography>
@@ -83,6 +75,14 @@ export const CountryItem = ({
               {TotalDeaths.toLocaleString()}
             </Typography>
           </Grid>
+          {/* <Grid item xs={4}>
+            <Typography variant="body2" color="success.main">
+              Recovered
+            </Typography>
+            <Typography fontWeight={700}>
+              {TotalRecovered.toLocaleString()}
+            </Typography>
+          </Grid> */}
         </Grid>
       </Box>
     </Paper>
