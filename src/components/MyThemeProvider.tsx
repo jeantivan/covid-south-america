@@ -7,7 +7,7 @@ import React, {
   useMemo,
 } from "react";
 import { ColorModeOptions } from "../types";
-import { getInitialColorMode, COLOR_MODE_KEY } from "../utils";
+import { COLOR_MODE_KEY, getInitialColorMode } from "../utils";
 
 import {
   createTheme,
@@ -28,7 +28,7 @@ export const useColorMode = () => useContext(ColorMode);
 
 export const MyThemeProvider = ({ children }: { children: ReactNode }) => {
   const [mode, rawSetColorMode] = useState<"light" | "dark">(
-    getInitialColorMode()
+    getInitialColorMode
   );
 
   const colorMode = useMemo(
@@ -55,11 +55,16 @@ export const MyThemeProvider = ({ children }: { children: ReactNode }) => {
           palette: {
             mode,
             primary: orange,
+            background: {
+              paper: mode === "light" ? "#fafafa" : "#424242",
+            },
           },
         })
       ),
     [mode]
   );
+
+  console.log(theme);
 
   useEffect(() => {
     if (!window.localStorage.getItem(COLOR_MODE_KEY)) {
