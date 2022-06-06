@@ -1,63 +1,53 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Grid, Paper, Typography } from "@mui/material";
-
-import makeStyles from '@mui/styles/makeStyles';
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 import { FLAG_PREFIX } from "../constants";
 import { SummaryCountryResponse } from "../types";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    borderWidth: 2,
-    cursor: "pointer",
-    padding: theme.spacing(1),
-
-    "&:hover": {
-      borderColor: theme.palette.primary.main,
-      boxShadow: theme.shadows[3],
-    },
-  },
-  link: {
-    textDecoration: "none",
-    color: "inherit",
-  },
-  countryImg: {
-    borderRadius: theme.spacing(0.5),
-    width: 48,
-    objectFit: "cover",
-  },
-  result: {
-    fontWeight: 700,
-  },
-  confirmed: {
-    color: theme.palette.info.main,
-  },
-  recovered: {
-    color: theme.palette.success.main,
-  },
-  deaths: {
-    color: theme.palette.error.main,
-  },
-}));
-
-export const CountryItem: React.FC<SummaryCountryResponse> = ({
+export const CountryItem = ({
   Country,
   Slug,
   TotalConfirmed,
   TotalRecovered,
   TotalDeaths,
-}) => {
-  const classes = useStyles();
+}: SummaryCountryResponse) => {
   return (
-    <Paper variant="outlined" className={classes.paper}>
-      <Link to={`/country/${Slug}`} className={classes.link}>
+    <Paper
+      variant="outlined"
+      sx={(theme: any) => ({
+        borderWidth: 2,
+        cursor: "pointer",
+        p: 1,
+
+        "&:hover": {
+          borderColor: theme.palette.primary.main,
+          boxShadow: theme.shadows[3],
+        },
+      })}
+    >
+      <Box
+        component={Link}
+        to={`/country/${Slug}`}
+        sx={{
+          textDecoration: "none",
+          color: "inherit",
+        }}
+      >
         <Grid container spacing={1}>
           <Grid item xs="auto">
-            <img
-              className={classes.countryImg}
+            <Box
+              component="img"
               src={`${FLAG_PREFIX}${Slug}.png`}
               alt={`Bandera de ${Country}`}
+              sx={{
+                borderRadius: 0.5,
+                width: 48,
+                objectFit: "cover",
+              }}
             />
           </Grid>
 
@@ -70,31 +60,31 @@ export const CountryItem: React.FC<SummaryCountryResponse> = ({
 
         <Grid container spacing={1}>
           <Grid item xs={4}>
-            <Typography variant="body2" className={classes.confirmed}>
+            <Typography variant="body2" color="info.main">
               Confirmed
             </Typography>
-            <Typography className={classes.result}>
+            <Typography fontWeight={700}>
               {TotalConfirmed.toLocaleString()}
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography variant="body2" className={classes.recovered}>
+            <Typography variant="body2" color="success.main">
               Recovered
             </Typography>
-            <Typography className={classes.result}>
+            <Typography fontWeight={700}>
               {TotalRecovered.toLocaleString()}
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography variant="body2" className={classes.deaths}>
+            <Typography variant="body2" color="error.main">
               Deaths
             </Typography>
-            <Typography className={classes.result}>
+            <Typography fontWeight={700}>
               {TotalDeaths.toLocaleString()}
             </Typography>
           </Grid>
         </Grid>
-      </Link>
+      </Box>
     </Paper>
   );
 };

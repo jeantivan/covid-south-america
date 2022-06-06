@@ -1,10 +1,17 @@
 import React from "react";
 import useSWR from "swr";
-import { Link, Redirect, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 
-import { Box, Button, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import { Skeleton } from '@mui/material';
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  useMediaQuery,
+  useTheme,
+  Skeleton,
+} from "@mui/material";
+
 import { ParentSize } from "@visx/responsive";
 
 import { timeFormat } from "d3-time-format";
@@ -17,44 +24,15 @@ import { FLAG_PREFIX } from "../constants";
 import { CountryResponse } from "../types";
 import { fetcher, getCountryNameBySlug } from "../utils";
 
-const useStyles = makeStyles((theme) => ({
-  imgContainer: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up("sm")]: {
-      marginRight: theme.spacing(4),
-    },
-  },
-  countryImg: {
-    borderRadius: theme.spacing(0.5),
-    width: 64,
-    objectFit: "cover",
-    [theme.breakpoints.up("md")]: {
-      width: 80,
-    },
-  },
-  Confirmed: {
-    color: theme.palette.info.main,
-  },
-  Recovered: {
-    color: theme.palette.success.main,
-  },
-  Deaths: {
-    color: theme.palette.error.main,
-  },
-  result: {
-    fontWeight: 700,
-  },
-}));
-
-const margin = { top: 16, right: 16, bottom: 40, left: 45 };
-
 export const CountryPage = () => {
   const { country } = useParams<{ country: string }>();
 
   const countryName = getCountryNameBySlug(country);
-  const classes = useStyles();
+  //const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  console.log(theme);
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { data, error } = useSWR<CountryResponse[]>(
     `https://api.covid19api.com/dayone/country/${country}`,
@@ -62,7 +40,7 @@ export const CountryPage = () => {
   );
 
   if (!countryName) {
-    return <Redirect to="/404" />;
+    return <Navigate to="/404" />;
   }
 
   const lastUpdate = data ? data[data?.length - 1] : ({} as CountryResponse);
@@ -77,13 +55,22 @@ export const CountryPage = () => {
         component="section"
         id="title-section"
       >
-        <div className={classes.imgContainer}>
-          <img
-            className={classes.countryImg}
+        <Box
+          sx={{
+            mr: { xs: 2, sm: 4 },
+          }}
+        >
+          <Box
+            component="img"
+            sx={{
+              borderRadius: 0.5,
+              width: { xs: 64, sm: 80 },
+              objectFit: "cover",
+            }}
             src={`${FLAG_PREFIX}${country}.png`}
             alt={`Bandera de ${country}`}
           />
-        </div>
+        </Box>
         <Box flex={1}>
           <Typography variant="h4" component="h2" noWrap>
             {countryName}
@@ -93,7 +80,7 @@ export const CountryPage = () => {
 
       {!error ? (
         <>
-          <Box component="section" id="general-summary-section">
+          <Box component="section" id="general-summary-section" mb={3}>
             <Grid container spacing={4}>
               <Grid xs={12} item container spacing={2}>
                 <Grid item xs={12}>
@@ -102,14 +89,10 @@ export const CountryPage = () => {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm>
-                  <Typography variant="h6" className={classes.Confirmed}>
+                  <Typography variant="h6" color="info.main">
                     Confirmed
                   </Typography>
-                  <Typography
-                    variant="h4"
-                    component="p"
-                    className={classes.result}
-                  >
+                  <Typography variant="h4" component="p" fontWeight={700}>
                     {data ? (
                       lastUpdate.Confirmed.toLocaleString()
                     ) : (
@@ -118,31 +101,23 @@ export const CountryPage = () => {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm>
-                  <Typography variant="h6" className={classes.Recovered}>
+                  <Typography variant="h6" color="error.main">
+                    Deaths
+                  </Typography>
+                  <Typography variant="h4" component="p" fontWeight={700}>
+                    {data ? lastUpdate.Deaths.toLocaleString() : <Skeleton />}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm>
+                  <Typography variant="h6" color="success.main">
                     Recovered
                   </Typography>
-                  <Typography
-                    variant="h4"
-                    component="p"
-                    className={classes.result}
-                  >
+                  <Typography variant="h4" component="p" fontWeight={700}>
                     {data ? (
                       lastUpdate.Recovered.toLocaleString()
                     ) : (
                       <Skeleton />
                     )}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm>
-                  <Typography variant="h6" className={classes.Deaths}>
-                    Deaths
-                  </Typography>
-                  <Typography
-                    variant="h4"
-                    component="p"
-                    className={classes.result}
-                  >
-                    {data ? lastUpdate.Deaths.toLocaleString() : <Skeleton />}
                   </Typography>
                 </Grid>
 
@@ -179,7 +154,6 @@ export const CountryPage = () => {
                                 height={height}
                                 data={data}
                                 dataKey={"Confirmed"}
-                                margin={margin}
                               />
                             )}
                           </ParentSize>
@@ -209,7 +183,6 @@ export const CountryPage = () => {
                                 height={height}
                                 data={data}
                                 dataKey={"Recovered"}
-                                margin={margin}
                               />
                             )}
                           </ParentSize>
@@ -239,7 +212,6 @@ export const CountryPage = () => {
                                 height={height}
                                 data={data}
                                 dataKey={"Deaths"}
-                                margin={margin}
                               />
                             )}
                           </ParentSize>

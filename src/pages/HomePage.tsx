@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import useSWR from "swr";
 
-import { Box, Grid, IconButton, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import { Skeleton } from '@mui/material';
+import {
+  Box,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+  Skeleton,
+} from "@mui/material";
+import { Theme } from "@mui/material/styles";
+
 import MapIcon from "@mui/icons-material/Map";
 import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import { ParentSize } from "@visx/responsive";
@@ -17,34 +26,16 @@ import { SouthAmericaMap } from "../components/SouthAmericaMap";
 import { GlobalSummaryResponse } from "../types";
 import { computeLASummary, fetcher } from "../utils";
 
-const useStyles = makeStyles((theme) => ({
-  confirmed: {
-    color: theme.palette.info.main,
-  },
-  recovered: {
-    color: theme.palette.success.main,
-  },
-  deaths: {
-    color: theme.palette.error.main,
-  },
-  result: {
-    fontWeight: 700,
-  },
-}));
-
 export const HomePage = () => {
-  const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const [viewMap, setViewMap] = useState(true);
+  const [viewMap, setViewMap] = useState<boolean>(true);
   const { data: globalData } = useSWR<GlobalSummaryResponse>(
     `https://api.covid19api.com/summary`,
     fetcher
   );
   const laSummary = computeLASummary(globalData);
-
-  console.log({laSummary})
 
   return (
     <Box component="section">
@@ -66,11 +57,13 @@ export const HomePage = () => {
               <Typography
                 variant="h5"
                 component="h4"
-                className={classes.confirmed}
+                sx={{
+                  color: (theme: Theme) => theme.palette.info.main,
+                }}
               >
                 Confirmed
               </Typography>
-              <Typography variant="h3" component="p" className={classes.result}>
+              <Typography variant="h3" component="p" fontWeight={700}>
                 {laSummary ? (
                   laSummary.Summary.TotalConfirmed.toLocaleString()
                 ) : (
@@ -82,13 +75,15 @@ export const HomePage = () => {
               <Typography
                 variant="h5"
                 component="h4"
-                className={classes.recovered}
+                sx={{
+                  color: (theme: Theme) => theme.palette.error.main,
+                }}
               >
-                Recovered
+                Deaths
               </Typography>
-              <Typography variant="h3" component="p" className={classes.result}>
+              <Typography variant="h3" component="p" fontWeight={700}>
                 {laSummary ? (
-                  laSummary.Summary.TotalRecovered.toLocaleString()
+                  laSummary.Summary.TotalDeaths.toLocaleString()
                 ) : (
                   <Skeleton />
                 )}
@@ -98,18 +93,21 @@ export const HomePage = () => {
               <Typography
                 variant="h5"
                 component="h4"
-                className={classes.deaths}
+                sx={{
+                  color: (theme: Theme) => theme.palette.success.main,
+                }}
               >
-                Deaths
+                Recovered
               </Typography>
-              <Typography variant="h3" component="p" className={classes.result}>
+              <Typography variant="h3" component="p" fontWeight={700}>
                 {laSummary ? (
-                  laSummary.Summary.TotalDeaths.toLocaleString()
+                  laSummary.Summary.TotalRecovered.toLocaleString()
                 ) : (
                   <Skeleton />
                 )}
               </Typography>
             </Grid>
+
             {!laSummary ? null : (
               <Grid item xs={12}>
                 <Typography color="textSecondary">
@@ -136,9 +134,10 @@ export const HomePage = () => {
                 <IconButton
                   aria-label={viewMap ? "See country list" : "See map"}
                   onClick={() => {
-                    setViewMap((state) => !state);
+                    setViewMap((state: boolean) => !state);
                   }}
-                  size="large">
+                  size="large"
+                >
                   {viewMap ? <ViewModuleIcon /> : <MapIcon />}
                 </IconButton>
               </Tooltip>
@@ -149,10 +148,20 @@ export const HomePage = () => {
               <AspectRatioBox ratio={isMobile ? 1 : 0.65}>
                 <Box height="100%">
                   {!laSummary ? (
-                    <Skeleton variant="rectangular" width="100%" height="100%" />
+                    <Skeleton
+                      variant="rectangular"
+                      width="100%"
+                      height="100%"
+                    />
                   ) : (
                     <ParentSize>
-                      {({ width, height }) => (
+                      {({
+                        width,
+                        height,
+                      }: {
+                        width: number;
+                        height: number;
+                      }) => (
                         <SouthAmericaMap
                           width={width}
                           height={height}

@@ -1,20 +1,24 @@
 import React from "react";
 
-import { Container, Grid, Link, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
 
-import makeStyles from '@mui/styles/makeStyles';
-
-const useStyles = makeStyles((theme) => ({
-  footer: {
-    background: theme.palette.background.paper,
-    padding: theme.spacing(3, 0),
-  },
-}));
-
-export const Footer: React.FC = () => {
-  const classes = useStyles();
+export const Footer = () => {
   return (
-    <footer id="footer" className={classes.footer}>
+    <Box
+      component="footer"
+      id="footer"
+      py={3}
+      sx={{
+        backgroundColor: (theme) =>
+          theme.palette.mode === "light"
+            ? theme.palette.grey[100]
+            : theme.palette.grey[900],
+      }}
+    >
       <Container>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -40,6 +44,6 @@ export const Footer: React.FC = () => {
           </Grid>
         </Grid>
       </Container>
-    </footer>
+    </Box>
   );
 };
