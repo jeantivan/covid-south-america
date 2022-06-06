@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Switch } from "react-router-dom";
+import { Routes } from "react-router-dom";
 
 import { Box, Container, GlobalStyles } from "@mui/material";
 
@@ -34,16 +34,14 @@ const globalStyles = {
   },
 };
 
-export const Layout: React.FC<{
-  children: ReactNode;
-}> = ({ children }) => {
+export const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <MyThemeProvider>
       <GlobalStyles styles={globalStyles} />
       <Navbar />
       <Container component="main" id="main">
         <Box py={4}>
-          <Switch>{children}</Switch>
+          <Routes>{children}</Routes>
         </Box>
       </Container>
       <Footer />
