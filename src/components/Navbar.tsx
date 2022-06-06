@@ -11,39 +11,20 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
+
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import GithubIcon from "@mui/icons-material/GitHub";
 
-import { useColorMode } from "./ColorMode";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+import { useColorMode } from "./MyThemeProvider";
 
 export const Navbar: React.FC = () => {
-  const classes = useStyles();
-
-  const { colorMode, toogleColorMode } = useColorMode();
+  const { mode, toggleColorMode } = useColorMode();
 
   return (
-    <AppBar
-      id="header"
-      position="static"
-      color={colorMode === "light" ? "primary" : "inherit"}
-      elevation={0}
-    >
+    <AppBar id="header" position="static" color="primary" elevation={0}>
       <Toolbar>
-        <Typography variant="h6" component="h1" className={classes.title}>
+        <Typography variant="h6" component="h1" sx={{ flex: 1 }}>
           <Link color="inherit" component={RRLink} to="/">
             Covid-19 in South America
           </Link>
@@ -52,16 +33,12 @@ export const Navbar: React.FC = () => {
           <Tooltip title="Toogle color mode" placement="bottom" arrow>
             <IconButton
               onClick={() => {
-                toogleColorMode();
+                toggleColorMode();
               }}
               aria-label="Toogle color mode"
               size="large"
             >
-              {colorMode === "light" ? (
-                <Brightness4Icon />
-              ) : (
-                <Brightness7Icon />
-              )}
+              {mode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
             </IconButton>
           </Tooltip>
         </Box>
