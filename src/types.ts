@@ -30,11 +30,10 @@ export type CountryResponse = {
   Lon?: string;
 };
 
-export type SummaryCountryResponse = Country &
-  Summary & {
-    Date: string;
-    Premium?: any;
-  };
+export interface SummaryCountryResponse extends Country, Summary {
+  Date: string;
+  Premium?: any;
+}
 
 export type GlobalSummaryResponse = {
   Global: Summary;

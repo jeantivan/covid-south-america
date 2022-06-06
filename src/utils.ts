@@ -130,7 +130,7 @@ export const COLOR_MODE_KEY = "color-mode";
 
 export const getInitialColorMode = (): ColorModeOptions => {
   // Si el usuario ya había elegido color para el tema se usa el mismo
-  const hasColorMode = JSON.parse(localStorage.getItem(COLOR_MODE_KEY) || "");
+  const hasColorMode = localStorage.getItem(COLOR_MODE_KEY) || "";
   if (hasColorMode === "light" || hasColorMode === "dark") return hasColorMode;
 
   // Si no han elegido algún modo, se chequea por color del sistema del usuario.
