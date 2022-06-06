@@ -1,41 +1,36 @@
 import React, { ReactNode } from "react";
-import { Box, BoxProps } from "@mui/material";
+import Box from "@mui/material/Box";
 
-import makeStyles from '@mui/styles/makeStyles';
-
-const useStyles = makeStyles({
-  root: {
-    position: "relative",
-    width: "100%",
-    height: 0,
-    paddingTop: (props: { ratio: number }) => `${props.ratio * 100}%`,
-  },
-
-  inside: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
-});
-
-interface AspectRatioBoxProps extends BoxProps {
+interface AspectRatioBoxProps {
   children: ReactNode;
   ratio: number;
 }
 
-export const AspectRatioBox: React.FC<AspectRatioBoxProps> = ({
+export const AspectRatioBox = ({
   ratio,
   children,
   ...rest
-}) => {
-  const classes = useStyles({ ratio });
+}: AspectRatioBoxProps) => {
   return (
-    <Box className={classes.root} {...rest}>
-      <div className={classes.inside}>{children}</div>
+    <Box
+      sx={{
+        position: "relative",
+        width: "100%",
+        height: 0,
+        paddingTop: `${ratio * 100}%`,
+      }}
+      {...rest}
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          inset: 0,
+        }}
+      >
+        {children}
+      </Box>
     </Box>
   );
 };
