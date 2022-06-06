@@ -1,4 +1,5 @@
-import { Route } from "react-router-dom";
+import React from "react";
+import { Route, BrowserRouter as Router } from "react-router-dom";
 
 import { Layout } from "./components/Layout";
 
@@ -8,11 +9,13 @@ import { Error404Page } from "./pages/Error404Page";
 
 function App() {
   return (
-    <Layout>
-      <Route path="/404" component={Error404Page} />
-      <Route path="/country/:country" component={CountryPage} />
-      <Route path="/" component={HomePage} />
-    </Layout>
+    <Router>
+      <Layout>
+        <Route path="/404" element={<Error404Page />} />
+        <Route path="/country/:country" element={<CountryPage />} />
+        <Route path="/" element={<HomePage />} />
+      </Layout>
+    </Router>
   );
 }
 
