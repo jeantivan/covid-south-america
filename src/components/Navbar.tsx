@@ -4,12 +4,12 @@ import { Link as RRLink } from "react-router-dom";
 import {
   AppBar,
   Box,
-  Hidden,
   IconButton,
   Link,
   Toolbar,
   Tooltip,
   Typography,
+  Theme,
 } from "@mui/material";
 
 import Brightness4Icon from "@mui/icons-material/Brightness4";
@@ -18,11 +18,16 @@ import GithubIcon from "@mui/icons-material/GitHub";
 
 import { useColorMode } from "./MyThemeProvider";
 
-export const Navbar: React.FC = () => {
+export const Navbar = () => {
   const { mode, toggleColorMode } = useColorMode();
 
   return (
-    <AppBar id="header" position="static" color="primary" elevation={0}>
+    <AppBar
+      id="header"
+      position="static"
+      elevation={0}
+      sx={{ backgroundColor: (theme: Theme) => theme.palette.primary.main }}
+    >
       <Toolbar>
         <Typography variant="h6" component="h1" sx={{ flex: 1 }}>
           <Link color="inherit" component={RRLink} to="/">
@@ -42,18 +47,18 @@ export const Navbar: React.FC = () => {
             </IconButton>
           </Tooltip>
         </Box>
-        <Hidden mdDown>
-          <Box ml={1}>
-            <IconButton
-              component="a"
-              href="https://github.com/jeantivan/"
-              aria-label="Github profile"
-              size="large"
-            >
-              <GithubIcon />
-            </IconButton>
-          </Box>
-        </Hidden>
+
+        <Box ml={1}>
+          <IconButton
+            component="a"
+            href="https://github.com/jeantivan/"
+            aria-label="Github profile"
+            size="large"
+            edge="end"
+          >
+            <GithubIcon />
+          </IconButton>
+        </Box>
       </Toolbar>
     </AppBar>
   );
