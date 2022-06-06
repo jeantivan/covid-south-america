@@ -177,7 +177,7 @@ export const CasesChart = ({
         tooltipTop: yScale(getYValue(d)),
       });
     },
-    [showTooltip, xScale, yScale, data, getYValue, margin]
+    [showTooltip, xScale, yScale, data, getYValue]
   );
 
   return width < 10 ? null : (
